@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>순차공개 가격책정 개선 후 자극물</title>
+<style>
+  :root{
+    --main:#03c75a; --teal:#10b8c4; --teal-dark:#0b9da7; --blue:#237bd3;
+    --red:#e84545; --green:#19c362; --bg:#f4f6f8; --line:#e6e8eb;
+    --text:#151515; --muted:#777; --card:#fff; --soft:#f7f8fa;
+  }
+  *{box-sizing:border-box} body{margin:0;background:#dfe3e8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif;color:var(--text)}
+  .phone{width:390px;max-width:100%;margin:0 auto;background:#fff;min-height:100vh;box-shadow:0 0 20px rgba(0,0,0,.16);position:relative;overflow:hidden}
+  .status{height:26px;padding:5px 12px;font-size:13px;display:flex;justify-content:space-between;align-items:center;background:#fff;color:#222}
+  .browser{height:58px;display:flex;gap:10px;align-items:center;padding:8px 12px;border-bottom:1px solid #eee;background:#fff}
+  .home,.menu,.plus{font-size:24px}.url{flex:1;background:#e9eaee;border-radius:22px;padding:10px 12px;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#111}
+  .topbar{display:flex;align-items:center;padding:14px 16px;gap:8px;border-bottom:1px solid #eee;background:#fff}.n{font-size:28px;font-weight:900;color:var(--main)}.brand{font-size:22px;font-weight:800}.brand span{color:#888;font-weight:700}.smart{margin-left:auto;background:#e7f7f8;color:#0a9aa3;padding:4px 8px;border-radius:15px;font-size:12px;font-weight:700}.my{font-size:18px;font-weight:800}
+  .tabs{display:flex;gap:20px;padding:0 16px 10px;border-bottom:1px solid #ddd;font-weight:700;color:#666}.tabs .active{color:#111;border-bottom:3px solid #111;padding-bottom:9px}.tabs .gift{color:#ff4a4a}
+  .screen{display:none;background:#fff;min-height:calc(100vh - 84px)}.screen.active{display:block}.content{padding:14px 14px 80px}.btn{border:0;border-radius:10px;padding:13px 16px;font-weight:800;font-size:16px;cursor:pointer}.btn.primary{background:var(--teal);color:#fff}.btn.outline{border:1px solid var(--line);background:#fff;color:#333}.btn.full{width:100%}.pillrow{display:flex;gap:8px;overflow:auto;padding:10px 14px;background:#fff;border-bottom:1px solid #eee}.pill{border:1px solid #ddd;border-radius:22px;padding:10px 14px;white-space:nowrap;font-weight:700;background:#fff;color:#444}.pill.active{border-color:var(--main);color:var(--main)}
+  .searchbox{display:flex;align-items:center;background:#f5f6f7;margin:16px 14px;border-radius:20px;padding:13px 16px;gap:10px}.searchbox .n{font-size:24px}.searchbox b{font-size:20px}.map{height:170px;background:linear-gradient(135deg,#d7eadb 0 25%,#eef4fb 25% 45%,#f3e4c5 45% 55%,#e7f3ff 55%);position:relative;border-top:1px solid #eee;border-bottom:1px solid #eee}.road{position:absolute;height:12px;background:#f6bd60;border-radius:10px;transform:rotate(-25deg);left:20px;right:20px;top:85px}.pin{position:absolute;background:#137ee8;color:#fff;width:28px;height:36px;border-radius:16px 16px 16px 3px;transform:rotate(-45deg);display:grid;place-items:center;font-size:18px}.pin span{transform:rotate(45deg)}
+  .hotel-card{padding:18px 14px;border-bottom:10px solid #f2f3f5;background:#fff}.hotel-title{font-size:22px;font-weight:850;color:#0876bf;margin:0 0 7px}.meta{font-size:15px;color:#555;margin-bottom:12px}.stars{color:#ff4a4a;font-weight:800}.photos{display:grid;grid-template-columns:1.1fr 1fr 1fr 1fr;height:135px;border-radius:12px;overflow:hidden;gap:2px}.photo{background-size:cover;background-position:center}.photo.p1{background:linear-gradient(135deg,#c4d8e9,#97b081 45%,#dfd1bd 46%)}.photo.p2{background:linear-gradient(135deg,#1c4d78,#eaa84a 50%,#111 80%)}.photo.p3{background:linear-gradient(135deg,#d8d1ca,#654321 55%,#1a1a1a)}.photo.p4{background:linear-gradient(135deg,#e7d8c4,#845f3b 70%)}.price-badge{position:absolute;right:16px;bottom:12px;background:rgba(255,255,255,.92);border-radius:12px;padding:8px 10px;text-align:right;box-shadow:0 2px 8px rgba(0,0,0,.12)}.photos-wrap{position:relative}.price-badge b{font-size:22px}.price-badge small{display:block;color:#555;font-weight:700}.taxnote{font-size:12px;color:#e05555;margin-top:8px;font-weight:800}.list-header{position:sticky;top:0;z-index:2;background:#fff;border-bottom:1px solid #eee}.ad{margin:10px 14px;background:#f5f7f8;border-radius:12px;padding:12px;color:#555;font-size:14px}.compare-layout{display:flex;gap:10px}.room-card{border:1px solid var(--line);border-radius:15px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)}.room-card.highlight{border:2px solid var(--main)}.room-img{height:150px;background:linear-gradient(135deg,#d3cec7,#fff 35%,#574332 65%,#161616);position:relative}.room-img:after{content:'+3';position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.55);color:#fff;border-radius:12px;padding:3px 8px}.room-body{padding:12px}.badge{display:inline-block;background:#e9fff1;color:#05a84e;border-radius:4px;padding:4px 6px;font-size:11px;font-weight:900;margin-right:4px}.badge.red{background:#ffecec;color:#ef4b4b}.room-name{font-weight:800;line-height:1.35;margin:8px 0}.info-line{font-size:13px;color:#555;margin:5px 0}.price-row{display:flex;align-items:flex-end;gap:10px;margin-top:8px}.old{text-decoration:line-through;color:#999;font-size:13px}.current{font-size:22px;font-weight:900}.included{font-size:12px;color:#777}.reserve{margin-left:auto;background:var(--teal);color:#fff;border:0;border-radius:9px;padding:12px 15px;font-weight:900}.detail-hero{height:230px;display:grid;grid-template-columns:1.35fr 1fr;gap:2px}.detail-hero .main{background:linear-gradient(135deg,#c4d8e9,#97b081 45%,#dfd1bd 46%)}.detail-hero .sub{display:grid;grid-template-columns:1fr 1fr;gap:2px}.place{padding:14px}.hotel-name{font-size:25px;font-weight:900;margin:10px 0}.location{color:#088bb7;font-size:13px;font-weight:700}.total-top{text-align:right;font-size:16px;font-weight:800}.total-top b{font-size:23px}.section{padding:17px 14px;border-top:8px solid #f3f4f5}.section h3{margin:0 0 14px;font-size:20px}.price-control{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:10px}.price-control button{flex:1;padding:12px;background:#fff;border:0;font-weight:800}.price-control button.active{background:#e9fbfb;color:#099aa4}.vendor{background:#f8f9fa;border-radius:14px;margin:10px 0;padding:13px}.vendor .name{font-weight:900}.vendor .vendor-price{float:right;font-weight:900}.breakdown{font-size:12px;color:#6d6d6d;margin-top:6px}.bottom-sticky{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:390px;max-width:100%;background:#fff;border-top:1px solid #ddd;padding:10px 14px;display:flex;align-items:center;gap:12px;z-index:9}.bottom-sticky .amount{font-size:19px;font-weight:900}.bottom-sticky small{display:block;color:#777;font-size:11px}.loading{padding:48px 22px}.progress{height:3px;background:#ddd;margin:20px 0}.progress div{height:100%;width:82%;background:#111}.notice{background:#f4f4f4;border-radius:20px;padding:20px;margin-top:70px}.notice h3{font-size:21px;margin:0 0 12px}.notice li{margin:10px 0;color:#555;line-height:1.55}.seller-header{background:#fff;border-bottom:1px solid #eee}.seller-cover{height:250px;background:linear-gradient(155deg,#abd3df,#f3b36d 45%,#8c6f50 46%,#3a2218);position:relative;color:#fff}.seller-cover:after{content:'1/101';position:absolute;right:12px;bottom:10px;background:rgba(0,0,0,.4);padding:3px 8px;border-radius:10px}.seller-title{padding:14px}.filters{background:#edf7fb;padding:12px;display:flex;gap:8px;flex-wrap:wrap}.filter{background:#fff;border-radius:20px;padding:8px 12px;font-size:13px}.filter.active{background:var(--teal);color:white}.booking-top{height:52px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;border-bottom:1px solid #eee;position:relative}.back{position:absolute;left:14px;font-size:30px;cursor:pointer}.timer{background:#fff3f3;color:#e34848;text-align:center;padding:12px;font-weight:900}.summary-box{border:1px solid #ddd;border-radius:14px;margin:12px 0;overflow:hidden}.date-row{display:grid;grid-template-columns:1fr .5fr 1fr;background:#f8f8ff;text-align:center;padding:16px 8px;font-weight:900}.date-row span{color:#08aeb8}.summary-body{padding:14px;font-weight:750;line-height:1.5}.free-cancel{background:#efedff;color:#2f82d9;border-radius:8px;padding:12px;font-weight:900;margin:14px 0}.fee-table{font-size:17px}.fee-row{display:flex;justify-content:space-between;margin:9px 0}.fee-row.discount{color:#17bb5f}.fee-row.final{color:#e23d3d;font-weight:900;font-size:20px;border-top:1px dashed #ddd;padding-top:12px}.paybtn{background:var(--teal);color:#fff;border:0;border-radius:12px;width:100%;padding:18px;font-size:22px;font-weight:900}.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:76px;background:#222;color:#fff;border-radius:18px;padding:10px 18px;font-weight:700;opacity:0;transition:.25s;z-index:20}.toast.show{opacity:1}.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;z-index:30}.modal.active{display:block}.sheet{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:390px;max-width:100%;background:#fff;border-radius:22px 22px 0 0;max-height:86vh;overflow:auto}.sheet-head{display:flex;align-items:center;padding:18px 16px;border-bottom:1px solid #eee}.close{margin-left:auto;font-size:32px;color:#777;cursor:pointer}.date-pick{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}.date-pick button{background:#fff;border:1px solid #ddd;border-radius:9px;padding:14px;font-weight:900}.date-pick button.active{border-color:#16aeb9;color:#16aeb9}.calendar{padding:10px 18px 90px}.month{text-align:center;font-size:26px;font-weight:900;margin:20px 0}.week,.days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}.week div{color:#777;font-weight:800;padding:8px 0}.days button{height:52px;border:0;background:#fff;font-size:18px;border-radius:8px}.days button.sun{color:#e14b4b}.days button.selected{background:#38abb5;color:#fff;font-weight:900}.days button.range{background:#c7edef;border-radius:0}.apply{position:absolute;right:16px;bottom:16px;background:#38abb5;color:#fff;border:0;border-radius:10px;padding:14px 28px;font-size:18px;font-weight:900}.label-exp{font-size:11px;color:#888;text-align:center;background:#f7f7f7;padding:4px}.hidden{display:none!important}
+  .tax-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 10px}
+  .tax-toggle-label{font-size:13px;font-weight:800;color:#333}
+  .switch{position:relative;display:inline-block;width:46px;height:26px;flex-shrink:0;cursor:pointer}
+  .switch input{display:none}
+  .slider{position:absolute;inset:0;background:#ccc;border-radius:26px;transition:.25s}
+  .slider:before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+  .switch input:checked + .slider{background:var(--teal)}
+  .switch input:checked + .slider:before{transform:translateX(20px)}
+
+  .stage-wrap{display:flex;flex-direction:column;align-items:center;gap:0;padding:0;background:#dfe3e8;min-height:100vh}
+  .guide{order:-1;position:sticky;top:0;z-index:50;width:390px;max-width:100%;background:#fff;padding:14px 18px 16px;box-shadow:0 3px 10px rgba(0,0,0,.12);border-bottom:1px solid #e2e4e8}
+  .guide .step{font-size:16px;font-weight:900;margin:0 0 6px;color:#151515}
+  .guide .desc{font-size:13.5px;line-height:1.55;color:#333}
+  .guide .action{margin-top:10px;padding:9px 12px;background:#f4f6f8;border-radius:9px;font-size:13px;color:#237bd3;font-weight:700}
+  @media (min-width:820px){
+    .stage-wrap{flex-direction:row;align-items:flex-start;justify-content:center;gap:28px;padding:28px 16px}
+    .guide{order:0;position:sticky;top:28px;width:300px;border-radius:16px;padding:20px 20px 22px;border-bottom:0}
+    .guide .step{font-size:19px}
+    .guide .desc{font-size:15px}
+  }
+</style>
+</head>
+<body>
+<div class="stage-wrap">
+<div class="phone" id="app">
+  <div class="status"><span>SKT 2:09</span><span>◔  Wi‑Fi  86</span></div>
+  <div class="browser"><span class="home">⌂</span><div class="url" id="url">m.search-service.com/search</div><span class="plus">＋</span><span class="menu">⋮</span></div>
+  <div id="search" class="screen active">
+    <div class="searchbox"><span class="n">S</span><b>서울호텔</b><span style="margin-left:auto;color:#18c76b;font-size:28px">◉</span></div>
+    <div class="tabs"><span class="active">AI</span><span>블로그</span><span>카페</span><span>이미지</span><span>클립</span></div>
+    <div class="pillrow"><button class="pill" onclick="openDateModal()">📅 일정 선택</button><button class="pill">👤 인원 선택</button></div>
+    <div class="map"><div class="road"></div><div class="pin" style="left:55px;top:58px"><span>▮</span></div><div class="pin" style="right:35px;top:45px"><span>▮</span></div><div class="pin" style="left:24px;top:120px"><span>▮</span></div></div>
+    <div class="pillrow"><button class="pill active">관련도순⌄</button><button class="pill" onclick="go('list')">실시간 가격비교</button><button class="pill">4·5성급</button><button class="pill">주말 체크인</button></div>
+    <div class="hotel-card" onclick="go('detail')">
+      <h2 class="hotel-title">서울신라호텔</h2><div class="meta"><span class="stars">★</span> 9.3 · 5성급 · 중구 장충동2가 · 수영장이 매우 좋음</div>
+      <div class="photos-wrap"><div class="photos"><div class="photo p1"></div><div class="photo p2"></div><div class="photo p3"></div><div class="photo p4"></div></div><div class="price-badge"><b>2,186,380원~</b><small>세금·봉사료 포함</small></div></div>
+    </div>
+    <div class="hotel-card"><h2 class="hotel-title">그랜드 하얏트 서울</h2><div class="meta"><span class="stars">★</span> 8.8 · 5급 · 용산구 한남동 · 도시전망</div><div class="photos-wrap"><div class="photos"><div class="photo p2"></div><div class="photo p1"></div><div class="photo p4"></div><div class="photo p3"></div></div><div class="price-badge"><b>1,729,749원~</b><small>세금·봉사료 포함</small></div></div></div>
+  </div>
+
+  <div id="list" class="screen">
+    <div class="topbar"><span onclick="go('search')" style="font-size:26px;cursor:pointer;margin-right:2px">‹</span><span class="n">S</span><span class="brand">여행상품 <span>여행정보</span></span><span class="smart">S 스마트</span><span class="my">MY</span></div>
+    <div class="tabs"><span class="gift">🎁 여행핫딜</span><span>항공</span><span class="active">호텔</span><span>패키지</span><span>For U</span></div>
+    <div class="list-header"><div class="content" style="padding-bottom:4px"><b>국내 호텔  서울호텔⌄</b><button class="pill" onclick="openDateModal()" style="float:right;padding:7px 10px">07.17 - 07.20, 3박</button><div style="clear:both"></div><div class="pillrow" style="padding-left:0"><span class="pill active">관련도순</span><span class="pill">호텔등급</span><span class="pill">실시간 가격비교</span></div><div class="ad">판매 사이트에서 숙소명, 위치, 가격 등을 재확인하세요.</div></div></div>
+    <div class="content" style="padding-top:0">
+      <div class="room-card" onclick="go('detail')"><div class="room-body"><div class="compare-layout"><div style="flex:1"><h3 style="margin:0">서울신라호텔</h3><div class="meta"><span class="stars">★</span> 9.3 · 5성급 · 9만원</div></div><button class="btn primary">전체 가격 비교하기</button></div><div class="photos-wrap"><div class="photos" style="height:110px"><div class="photo p1"></div><div class="photo p2"></div><div class="photo p3"></div><div class="photo p4"></div></div></div><div class="vendor"><span class="name">시크릿몰</span><span class="vendor-price">2,186,380원~</span><div class="breakdown">트래블클럽 혜택 · 세금 및 봉사료 포함</div></div><div class="vendor"><span class="name">Tripbotz</span><span class="vendor-price">2,717,001원~</span><div class="breakdown">무료취소 · 세금 및 봉사료 포함</div></div></div></div>
+      <div class="room-card"><div class="room-body"><h3 style="margin:0">그랜드 워커힐 서울</h3><div class="meta"><span class="stars">★</span> 9.0 · 5성급</div><div class="photos" style="height:110px"><div class="photo p4"></div><div class="photo p3"></div><div class="photo p1"></div><div class="photo p2"></div></div><div class="vendor"><span class="name">Trip.com</span><span class="vendor-price">1,597,200원~</span><div class="breakdown">세금 및 봉사료 포함</div></div></div></div>
+    </div>
+  </div>
+
+  <div id="detail" class="screen">
+    <div class="topbar"><span onclick="go('search')" style="font-size:26px;cursor:pointer">‹</span><span class="brand">서울신라호텔 <span>변경⌄</span></span><span class="my">MY</span></div>
+    <div class="detail-hero"><div class="main"></div><div class="sub"><div class="photo p2"></div><div class="photo p3"></div><div class="photo p4"></div><div class="photo p1"></div></div></div>
+    <div class="place"><div class="location">📍 서울특별시 › 중구 › 장충동2가</div><div class="hotel-name">서울신라호텔 <span style="font-size:14px;color:#777">5성급</span></div><div class="total-top">07.17-07.20. (3박) <b>2,186,380원</b></div><button class="btn primary full" onclick="go('seller')">전체 가격 비교하기</button><div class="meta" style="line-height:1.7;margin-top:12px">야외 수영장, 실내 수영장, 피트니스 센터 완비<br>호텔스컴바인 9.3/10 · 부킹닷컴 9.2/10 · 플랫폼 평점 4.7/5</div></div>
+    <div class="section"><h3>가격비교</h3><button class="pill" onclick="openDateModal()">07.17. 금 - 07.20. 월, 3박</button><button class="pill">성인2</button><div class="price-control"><button class="active">1박 최저가 추이</button></div><div class="tax-toggle-row"><span class="tax-toggle-label">세금·봉사료 포함 가격으로 보기</span><label class="switch"><input type="checkbox" id="taxBtn" onchange="toggleTaxDetail()"><span class="slider"></span></label></div><div class="taxnote" id="taxNote">3박 세금미포함가격</div><div class="ad">판매 사이트에서 숙소명, 위치, 가격 등을 재확인하세요.</div><div class="vendor"><span class="name">시크릿몰</span><span class="vendor-price" id="price-secret">1,967,742원~</span><div class="breakdown" id="bd-secret">스마트할인 6.6% · 객실가만 표시(세금·봉사료 234,255원 별도)</div></div><div class="vendor"><span class="name">Tripbotz</span><span class="vendor-price" id="price-tripbotz">2,470,001원~</span><div class="breakdown" id="bd-tripbotz">무료취소 26.07.15까지 · 세금 및 봉사료 별도</div></div><div class="vendor"><span class="name">Booking.com</span><span class="vendor-price" id="price-booking">2,569,500원~</span><div class="breakdown" id="bd-booking">트래블클럽 혜택 · 세금 및 봉사료 별도</div></div></div>
+    <div class="bottom-sticky"><div class="amount" id="sticky-amount">1,967,742원~<small id="sticky-note">세금 및 봉사료 별도 · 3박 · 2명</small></div><button class="btn primary" onclick="go('seller')">전체 가격 비교하기</button></div>
+  </div>
+
+  <div id="redirect" class="screen">
+    <div class="loading"><div class="progress"><div></div></div><p style="font-size:22px;font-weight:900;color:#666">판매자 사이트로 이동 중입니다.</p><h1 style="margin-top:45px">시크릿몰</h1><h1>서울신라호텔</h1><h3>[회원전용] 디럭스 더블 [BF SHILLA PROMOTION] 더 파크뷰 조식 2인</h3><h3>2026.07.17. 금 ~ 2026.07.20. 월 (3박)</h3><h3>성인 2명</h3><div class="notice"><h3>⚠ 예약 시 숙소명과 위치, 가격 등을 꼭 확인하세요</h3><ul><li>숙소 정보와 가격은 실시간 변동되므로, 검색결과와 판매자 사이트의 정보가 다를 수 있습니다.</li><li>예약·취소·환불 등과 관련한 책임은 각 판매자에게 있습니다.</li><li>판매자 사이트의 가격은 1박 기준으로 표시될 수 있습니다.</li></ul></div></div>
+  </div>
+
+  <div id="seller" class="screen">
+    <div class="seller-header"><div class="topbar"><span onclick="go('detail')" style="font-size:26px;cursor:pointer;margin-right:2px">‹</span><span class="brand">호텔 시크릿몰</span><span class="smart">S 스마트</span></div><div class="seller-cover"></div><div class="seller-title"><span class="badge">2024 베스트 호텔</span><h2 style="margin:8px 0">서울신라호텔 <span style="font-size:15px;color:#555">· 5성급</span></h2><div class="meta">서울특별시 중구 동호로 249 · ★ 4.7 / 5 · 이용후기 1,002개</div><button class="pill" onclick="openDateModal()">🔍 07.17. 금 - 07.20. 월(3박) · 성인 2 아동 0</button></div><div class="filters"><span class="filter active">전체 (15)</span><span class="filter">무료예약취소 (15)</span><span class="filter">조식포함 (9)</span><span class="filter">세금 및 봉사료 포함</span></div></div>
+    <div class="content"><div class="taxnote">ⓘ 세금 및 봉사료 포함 가격입니다.</div><div class="room-card highlight"><div class="room-img"></div><div class="room-body"><span class="badge">검색 화면에서 확인한 상품</span><span class="badge">무료취소 가능 최저가</span><div class="room-name">[회원전용] 디럭스 더블 [BF SHILLA PROMOTION] 더 파크뷰 조식 2인</div><div class="info-line">🍴 조식 포함</div><div class="info-line">✓ 무료취소 2026.07.16. 17:59까지</div><div class="info-line">ⓘ 세금 및 봉사료 포함</div><div class="price-row"><div><span class="badge red">6.6% 할인</span><span class="badge">스마트 등급 특가</span><br><span class="old">2,342,550원</span><br><span class="current">2,186,380원</span><div class="included">적립시 2,142,653원</div></div><button class="reserve" onclick="go('booking')">예약하기</button></div></div></div><div class="room-card"><div class="room-img"></div><div class="room-body"><div class="room-name">[회원전용] 디럭스 트윈 [BF SHILLA PROMOTION] 더 파크뷰 조식 2인</div><div class="info-line">ⓘ 세금 및 봉사료 포함</div><div class="price-row"><div><span class="old">2,342,550원</span><br><span class="current">2,186,380원</span></div><button class="reserve" onclick="go('booking')">예약하기</button></div></div></div></div>
+  </div>
+
+  <div id="booking" class="screen">
+    <div class="booking-top"><span class="back" onclick="go('seller')">←</span>예약하기</div><div class="timer">⏰ 선택하신 요금 만료까지 09:36</div><div class="content"><h1>서울신라호텔</h1><p class="meta">서울특별시 중구 동호로 249</p><div class="summary-box"><div class="date-row"><div><span>체크인</span><br>2026.07.17.금</div><div style="color:#777">(3박)</div><div><span>체크아웃</span><br>2026.07.20.월</div></div><div class="summary-body">[회원전용] 디럭스 더블 [BF SHILLA PROMOTION] 더 파크뷰 조식 2인<br><br>🍴 조식 포함<hr style="border:0;border-top:1px dashed #ddd">👤 객실 1개, 성인 2명, 아동 0명</div></div><div class="free-cancel">✓ 무료취소 2026.07.16. 17:59까지 (한국시간 기준)</div><h2>요금 정보</h2><div class="fee-table"><div class="fee-row"><span>객실</span><b>2,108,295 원</b></div><div class="fee-row"><span>세금 및 봉사료</span><b>234,255 원</b></div><div class="fee-row discount"><span>스마트 등급 고객 할인</span><b>-156,170 원</b></div><div class="fee-row final"><span>최종 결제금액</span><b>2,186,380 원</b></div></div><button class="paybtn" onclick="toast('실험 자극물입니다. 실제 결제는 진행되지 않습니다.')">2,186,380원 결제하기</button><p style="text-align:center;color:#237bd3;font-weight:900">2026.07.16. 17:59까지 취소수수료 없음!</p></div>
+  </div>
+
+  <div class="modal" id="dateModal"><div class="sheet"><div class="sheet-head"><h2 style="margin:0">숙박일정</h2><span class="close" onclick="closeDateModal()">×</span></div><div class="date-pick"><button class="active">체크인<br>2026.07.17. 금</button><button>체크아웃<br>2026.07.20. 월</button></div><div class="calendar"><div class="month">2026.07.</div><div class="week"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div><div class="days" id="days"></div></div><button class="apply" onclick="closeDateModal(); toast('07.17–07.20, 3박 일정이 적용되었습니다.')">적용</button></div></div>
+  <div id="toast" class="toast"></div>
+</div>
+<div class="guide" id="guide">
+  <div class="step" id="guideStep">호텔 검색 결과 확인</div>
+  <div class="desc" id="guideDesc">서울 호텔을 검색한 결과 화면입니다. 목록에 나타난 호텔들을 살펴보시고, 예약을 진행하고 싶은 호텔을 선택해 주세요.</div>
+  <div class="action" id="guideAction">👉 목록에서 '서울신라호텔'을 눌러 다음 화면으로 이동해 주세요.</div>
+</div>
+</div>
+<script>
+  let detailTaxIncluded = false;
+  function toggleTaxDetail(){
+    detailTaxIncluded = document.getElementById('taxBtn').checked;
+    const note = document.getElementById('taxNote');
+    if(detailTaxIncluded){
+      note.textContent = '3박 세금포함가격';
+      document.getElementById('price-secret').textContent = '2,186,380원~';
+      document.getElementById('bd-secret').textContent = '스마트할인 6.6% · 객실 2,108,295원 + 세금·봉사료 234,255원 − 할인 156,170원';
+      document.getElementById('price-tripbotz').textContent = '2,717,001원~';
+      document.getElementById('bd-tripbotz').textContent = '무료취소 26.07.15까지 · 세금 및 봉사료 포함';
+      document.getElementById('price-booking').textContent = '2,826,450원~';
+      document.getElementById('bd-booking').textContent = '트래블클럽 혜택 · 세금 및 봉사료 포함';
+      document.getElementById('sticky-amount').innerHTML = '2,186,380원~<small id="sticky-note">세금 및 봉사료 포함 · 3박 · 2명</small>';
+    } else {
+      note.textContent = '3박 세금미포함가격';
+      document.getElementById('price-secret').textContent = '1,967,742원~';
+      document.getElementById('bd-secret').textContent = '스마트할인 6.6% · 객실가만 표시(세금·봉사료 234,255원 별도)';
+      document.getElementById('price-tripbotz').textContent = '2,470,001원~';
+      document.getElementById('bd-tripbotz').textContent = '무료취소 26.07.15까지 · 세금 및 봉사료 별도';
+      document.getElementById('price-booking').textContent = '2,569,500원~';
+      document.getElementById('bd-booking').textContent = '트래블클럽 혜택 · 세금 및 봉사료 별도';
+      document.getElementById('sticky-amount').innerHTML = '1,967,742원~<small id="sticky-note">세금 및 봉사료 별도 · 3박 · 2명</small>';
+    }
+  }
+  const screens=['search','list','detail','redirect','seller','booking'];
+
+  const guideMap={
+    search:{ step:1, total:5, title:'호텔 검색 결과 확인',
+      desc:"서울 호텔을 검색한 결과 화면입니다. 목록에 나타난 호텔들을 살펴보시고, 예약을 진행하고 싶은 호텔을 선택해 주세요.",
+      action:"👉 목록에서 '서울신라호텔'을 눌러 다음 화면으로 이동해 주세요." },
+    list:{ step:1, total:5, title:'가격비교 목록 확인',
+      desc:"선택한 조건에 맞는 호텔 목록과 가격비교 화면입니다. 원하는 호텔을 선택해 다음 화면으로 이동해 주세요.",
+      action:"👉 '서울신라호텔' 항목을 눌러 다음 화면으로 이동해 주세요." },
+    detail:{ step:2, total:5, title:'호텔 상세 및 가격비교',
+      desc:"선택하신 호텔의 상세 정보와 여러 판매처의 가격을 비교해 볼 수 있는 화면입니다. 화면에 나타난 내용을 자유롭게 살펴봐 주세요.",
+      action:"👉 확인이 끝나면 '전체 가격 비교하기' 버튼을 눌러 다음 화면으로 이동해 주세요." },
+    redirect:{ step:3, total:5, title:'판매자 사이트 이동 안내',
+      desc:"선택하신 조건으로 예약을 진행하는 판매자 사이트로 이동한다는 안내 화면입니다.",
+      action:"👉 잠시 기다리시면 자동으로 다음 화면으로 이동합니다." },
+    seller:{ step:4, total:5, title:'판매자 사이트에서 객실 확인',
+      desc:"이동된 판매자 사이트 화면입니다. 객실 정보와 가격을 확인해 주세요.",
+      action:"👉 첫 번째로 나온 객실의 '예약하기' 버튼을 눌러 다음 화면으로 이동해 주세요." },
+    booking:{ step:5, total:5, title:'예약 내용 및 결제',
+      desc:"예약하신 내용과 요금 정보를 최종적으로 확인하는 화면입니다.",
+      action:"👉 내용을 확인하신 후 화면 하단의 결제하기 버튼을 눌러 예약을 완료해 주세요." }
+  };
+  function updateGuide(id){
+    const g=guideMap[id]; if(!g) return;
+    document.getElementById('guideStep').textContent=g.title;
+    document.getElementById('guideDesc').textContent=g.desc;
+    document.getElementById('guideAction').textContent=g.action;
+  }
+
+  function go(id){
+    screens.forEach(s=>document.getElementById(s).classList.remove('active'));
+    if(id==='seller'){
+      document.getElementById('redirect').classList.add('active'); document.getElementById('url').textContent='hotels.search-service.com/accommodation';
+      updateGuide('redirect');
+      setTimeout(()=>{document.getElementById('redirect').classList.remove('active');document.getElementById('seller').classList.add('active');document.getElementById('url').textContent='partner.triptopez.com/rate';updateGuide('seller');},900);return;
+    }
+    document.getElementById(id).classList.add('active');
+    const urls={search:'m.search-service.com/search',list:'hotels.search-service.com/list',detail:'hotels.search-service.com/accommodation',seller:'partner.triptopez.com/rate',booking:'partner.triptopez.com/reserve'};
+    document.getElementById('url').textContent=urls[id]||'hotels.search-service.com';
+    updateGuide(id);
+  }
+  function openDateModal(){document.getElementById('dateModal').classList.add('active')}
+  function closeDateModal(){document.getElementById('dateModal').classList.remove('active')}
+  function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+  const days=document.getElementById('days');
+  for(let i=0;i<3;i++){const b=document.createElement('button');b.disabled=true;days.appendChild(b)}
+  for(let d=1;d<=31;d++){const b=document.createElement('button');b.textContent=d; if([5,12,19,26].includes(d))b.classList.add('sun'); if(d===17){b.classList.add('selected');b.innerHTML='17<br><small>체크인</small>'} if(d===18||d===19)b.classList.add('range'); if(d===20){b.classList.add('selected');b.innerHTML='20<br><small>체크아웃</small>'} b.onclick=()=>toast('실험 자극물에서는 07.17–07.20 일정으로 고정됩니다.'); days.appendChild(b)}
+</script>
+</body>
+</html>

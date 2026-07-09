@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<title>멤버십 해지 — 해외형 플랫폼 현재 조건</title>
+<style>
+:root{
+  --blue:#2563eb;
+  --blue2:#0f6fff;
+  --yellow:#ffdc35;
+  --text:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --bg:#f5f6f7;
+  --green:#2e8b57;
+  --red:#cc3150;
+}
+*{box-sizing:border-box;scrollbar-width:none!important;-ms-overflow-style:none!important}
+*::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}
+body{margin:0;background:#d6d6d6;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center}
+.guide{all:unset;box-sizing:border-box;display:block;position:sticky;top:0;z-index:200;width:390px;max-width:100%;background:#fff;padding:14px 18px 16px;box-shadow:0 3px 10px rgba(0,0,0,.12);border-bottom:1px solid #e2e4e8}
+.guide .gtitle{all:unset;display:block;font-size:16px;font-weight:900;margin:0 0 6px;color:#151515}
+.guide .desc{all:unset;display:block;font-size:13.5px;line-height:1.55;color:#333}
+.guide .action{all:unset;display:block;margin-top:10px;padding:9px 12px;background:#f4f6f8;border-radius:9px;font-size:13px;color:#237bd3;font-weight:700}
+.phone{width:390px;max-width:100%;min-height:100vh;margin:0 auto;background:#fff;position:relative;box-shadow:0 0 22px rgba(0,0,0,.18);overflow:hidden}
+.status{height:28px;padding:6px 14px;font-size:13px;font-weight:700;display:flex;justify-content:space-between;background:var(--blue);color:#fff}
+.screen{display:none;min-height:calc(100vh - 28px);background:#fff}
+.screen.active{display:block}
+.scroll{height:calc(100vh - 28px);overflow-y:auto;padding-bottom:76px;overflow-x:hidden}
+.blue-scroll{height:calc(100vh - 28px);overflow-y:auto;padding-bottom:76px;background:linear-gradient(#2563eb,#0f7bff);color:#fff;overflow-x:hidden}
+.top{height:66px;background:var(--blue);display:flex;align-items:center;gap:10px;padding:10px 14px;position:sticky;top:0;z-index:5}
+.back{font-size:30px;color:#fff;cursor:pointer}
+.search{flex:1;height:44px;background:#fff;border-radius:12px;display:flex;align-items:center;gap:10px;padding:0 12px;color:#444;font-size:15px;border:1px solid rgba(0,0,0,.16)}
+.search .mag{font-size:23px;color:#111}.search .right{margin-left:auto;color:#111;font-size:22px}
+.tabs{display:flex;gap:22px;align-items:center;padding:12px 16px 8px;white-space:nowrap;overflow:auto;font-weight:800}
+.logo{font-size:26px;font-weight:900;letter-spacing:-1px}.logo:after{content:"";display:block;width:52px;height:4px;background:#fff;border-radius:4px;margin-top:2px}
+.tab.active{border-bottom:4px solid #fff;padding-bottom:8px}.new{background:#fff;color:var(--blue);padding:6px 10px;border-radius:6px}
+.welcome{font-size:34px;font-weight:900;padding:16px 18px 8px}
+.cards{display:flex;gap:12px;overflow:auto;padding:8px 18px 22px}
+.big-card{min-width:322px;height:420px;border-radius:18px;background:#4c443a;position:relative;overflow:hidden}
+.big-card .txt{position:absolute;z-index:2;left:18px;top:18px;right:18px}
+.big-card .small{font-size:18px}.big-card h2{font-size:31px;line-height:1.14;margin:8px 0}
+.yellow-pill{display:inline-block;background:var(--yellow);color:#111;border-radius:999px;padding:12px 20px;font-weight:900;margin-top:12px}
+.people{position:absolute;left:0;right:0;bottom:0;height:68%;background:
+radial-gradient(circle at 35% 32%, #f2cbb5 0 13%, transparent 13.5%),
+radial-gradient(circle at 69% 30%, #f0c8ad 0 13%, transparent 13.5%),
+radial-gradient(circle at 35% 28%, #483224 0 15%, transparent 15.5%),
+radial-gradient(circle at 69% 25%, #5a3a2b 0 17%, transparent 17.5%),
+linear-gradient(#cbd5e1 0 0) 25% 60%/25% 36% no-repeat,
+linear-gradient(#f3f4f6 0 0) 69% 61%/28% 35% no-repeat,
+linear-gradient(#6b7280 0 0) 42% 83%/80% 32% no-repeat,
+linear-gradient(135deg,#ddd,#9b7b63)}
+.side-card{min-width:110px;height:420px;border-radius:18px;background:linear-gradient(#374151,#111827);padding:18px 14px;position:relative;overflow:hidden}
+.side-card h3{font-size:24px;line-height:1.15}.side-card .yellow-pill{font-size:14px;padding:10px 14px}
+.section-title{font-size:26px;font-weight:900;padding:0 18px 12px}
+.tile-row{display:flex;gap:12px;padding:0 18px 28px;overflow:auto}
+.tile{min-width:160px;background:#fff;color:#111;border-radius:16px;overflow:hidden}
+.tile-img{height:118px;background:#eef2ff;display:flex;align-items:center;justify-content:center}
+.boxes:before{content:"";width:78px;height:48px;background:#b7833e;box-shadow:20px -13px 0 #d6a55e,-18px 18px 0 #e4b875}
+.food:before{content:"";width:120px;height:30px;background:#3f3f46;border-radius:20px;transform:rotate(-15deg);box-shadow:30px 9px 0 #eab308}
+.tile p{padding:10px 12px;margin:0;font-weight:800}
+.nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:390px;max-width:100%;height:62px;background:#fff;border-top:1px solid #ddd;display:flex;align-items:center;justify-content:space-around;z-index:10;color:#111}
+.nav div{text-align:center;font-size:25px}.nav small{display:block;font-size:10px;color:#777}
+.page-head{background:#fff;border-bottom:1px solid #ddd}
+.white-content{padding:18px 20px 90px;background:#fff}
+.profile{display:flex;align-items:center;gap:12px;padding:16px 20px}
+.avatar{width:66px;height:66px;border-radius:50%;background:#bfc7c9;position:relative;flex:0 0 auto}
+.avatar:before{content:"";position:absolute;width:25px;height:25px;border:6px solid #fff;border-radius:50%;left:15px;top:10px}
+.avatar:after{content:"";position:absolute;width:40px;height:24px;border:6px solid #fff;border-bottom:none;border-radius:30px 30px 0 0;left:8px;bottom:12px}
+.member-check{color:#f97316;font-weight:900}.profile-name{font-size:24px;font-weight:700}
+.gray-select{background:#e5e5e5;border-top:1px solid #d2d2d2;border-bottom:1px solid #d2d2d2;margin:0;padding:14px 20px;text-align:center;color:#1f6f9e;font-size:18px;cursor:pointer}
+.blue-box{background:var(--blue2);border-radius:10px;color:#fff;padding:24px 20px;margin:24px 10px}
+.blue-box h2{font-size:24px;line-height:1.25;margin:0 0 12px}.blue-box p{font-size:19px;margin:0 0 18px}
+.big-yellow-btn{width:100%;height:58px;border:0;border-radius:999px;background:var(--yellow);font-size:18px;font-weight:900;cursor:pointer}
+.upcoming{padding:18px 10px}.upcoming h2{font-size:26px;line-height:1.2}
+.game-card{width:285px;height:170px;border-radius:12px;background:linear-gradient(135deg,#9333ea,#1d4ed8);color:white;padding:34px 18px;font-weight:900;font-size:23px}
+.menu-row{padding:18px 20px;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between}
+.menu-row h3{margin:0;font-size:23px}.menu-row .sub{color:#1f6f9e;font-size:18px;margin-top:6px}
+.backline{height:48px;background:#f4f4f4;border-bottom:1px solid #ddd;display:flex;align-items:center;padding:0 16px;font-size:18px;color:#333}
+.cancel-title{font-size:28px;font-weight:900;line-height:1.25;margin:32px 14px 22px}
+.plan-card{border:1px solid #ddd;border-radius:8px;margin:0 14px 18px;padding:18px}
+.plan-card .name{font-size:25px;font-weight:900}.label{color:#555;font-weight:800;margin-top:18px}
+.plan-card .value{font-size:30px;margin-top:6px}
+.radio-card{border:1px solid #ddd;border-radius:8px;margin:0 14px 18px;overflow:hidden;background:#fff}
+.radio-title{display:flex;gap:14px;padding:18px;align-items:flex-start;font-size:20px;font-weight:900}
+.radio{width:28px;height:28px;border-radius:50%;border:3px solid #ddd;display:inline-block;flex:0 0 auto;position:relative}.radio.on{border-color:#1f76b5}.radio.on:after{content:"";position:absolute;width:12px;height:12px;background:#1f76b5;border-radius:50%;left:5px;top:5px}
+.radio-body{padding:0 18px 18px;font-size:18px;line-height:1.43}
+.loss{display:flex;gap:10px;margin:14px 0}.x{color:var(--red);font-size:23px;font-weight:900}
+.simple-section{padding:28px 20px;border-bottom:1px solid #ddd}.simple-section h2{font-size:24px;margin:0 0 8px}.simple-section p{font-size:18px;line-height:1.38}.outline-btn{width:100%;height:46px;border:1px solid #888;border-radius:999px;background:#fff;font-size:17px;margin:8px 0;cursor:pointer}
+.checkbox-row{display:flex;gap:12px;font-size:18px;line-height:1.35}.checkbox{width:28px;height:28px;border:2px solid #aaa;border-radius:4px;flex:0 0 auto}
+.benefit-head{font-size:28px;font-weight:900;line-height:1.25;padding:42px 20px 28px}.benefit-head .blue{color:#1976d2}
+.benefit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:0 20px 36px}.benefit-card img{width:100%;height:115px;object-fit:cover;border-radius:12px;background:#1d6bff}.benefit-card .img{height:115px;border-radius:12px;background:#1d6bff;display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:22px}.benefit-card h3{font-size:19px;margin:8px 0 4px}.benefit-card p{font-size:15px;line-height:1.35;margin:0}
+.button-stack{padding:22px 20px 28px}.button-stack .big-yellow-btn{margin:9px 0}.blue-link{text-align:center;color:#1f6f9e;font-size:16px;margin:16px 0}
+.final-actions{padding:18px 28px 24px}.final-actions .outline-btn{height:50px;font-size:18px}.final-actions .big-yellow-btn{margin-top:12px}
+.help-box{margin:24px 20px;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center}.help-box h2{font-size:25px}.help-inner{background:#2563eb;color:#fff;border-radius:12px;padding:22px}.help-inner h3{font-size:25px;margin:0 0 10px}.help-inner p{font-size:19px;line-height:1.35}.white-btn{background:#fff;border:0;border-radius:999px;height:46px;width:100%;font-size:17px;font-weight:800}
+.done-card{margin:34px 20px;border:2px solid var(--green);border-left:10px solid var(--green);border-radius:8px;padding:18px;display:flex;gap:12px}.check{color:var(--green);font-size:26px}.done-card h2{font-size:23px;margin:0 0 10px}.done-card p{font-size:18px;line-height:1.35;margin:0}.rejoin{margin:26px 20px;background:#2563eb;color:#fff;padding:28px 20px}.rejoin h2{font-size:26px}.rejoin p{font-size:22px;line-height:1.25}.rejoin .more{font-size:22px;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="guide" id="guide">
+  <div class="gtitle" id="guideStep">앱 홈 화면 확인</div>
+  <div class="desc" id="guideDesc">이 서비스의 앱 홈 화면입니다.</div>
+  <div class="action" id="guideAction">👉 '관리' 탭을 눌러 다음 화면으로 이동해 주세요.</div>
+</div>
+<div class="phone">
+  <div class="status"><span>17:21</span><span>Wi‑Fi 65</span></div>
+
+  <!-- 1. 메인 멤버십 화면 -->
+  <div id="home" class="screen active">
+    <div class="blue-scroll">
+      <div class="top">
+        <span class="back">←</span>
+        <div class="search"><span class="mag">⌕</span><span>서비스 검색</span><span class="right">⌘ 🎙</span></div>
+      </div>
+      <div class="tabs">
+        <div class="logo">member+</div>
+        <div class="tab active">나의 멤버십</div>
+        <div class="tab">혜택</div>
+        <div class="tab">가족</div>
+        <div class="new">신규</div>
+        <div class="tab" onclick="go('member')" style="cursor:pointer">관리</div>
+      </div>
+      <div class="welcome">홍*동님,<br>환영합니다!</div>
+      <div class="cards">
+        <div class="big-card">
+          <div class="txt">
+            <div class="small">함께 쓰되, 각자 편하게</div>
+            <h2>가족과 함께<br>멤버십 혜택 공유</h2>
+            <div class="yellow-pill">공유하기</div>
+          </div>
+          <div class="people"></div>
+        </div>
+        <div class="side-card">
+          <div>회원 전용 혜택</div>
+          <h3>주유·배송<br>특별 할인</h3>
+          <div class="yellow-pill">혜택 받기</div>
+        </div>
+      </div>
+      <div class="section-title">더 많은 멤버십 혜택 보기</div>
+      <div class="tile-row">
+        <div class="tile"><div class="tile-img boxes"></div><p>빠른 무료배송 혜택</p></div>
+        <div class="tile"><div class="tile-img food"></div><p>식료품·생활 혜택</p></div>
+      </div>
+      <div style="padding:0 20px 28px">
+        <button class="big-yellow-btn" onclick="go('member')">멤버십 관리로 이동</button>
+      </div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <!-- 2. 멤버십 요약/관리 진입 -->
+  <div id="member" class="screen">
+    <div class="scroll">
+      <div class="top"><span class="back" onclick="go('home')">←</span><div class="search"><span class="mag">⌕</span><span>서비스 검색</span><span class="right">⌘ 🎙</span></div></div>
+      <div class="profile">
+        <div class="avatar"></div>
+        <div><div><span class="member-check">✓ member+</span></div><div class="profile-name">홍*동</div><div style="font-size:20px">무료 체험 6일 남음</div></div>
+      </div>
+      <div class="gray-select" onclick="go('manage')">멤버십 관리, 해지 및 기타 ▾</div>
+      <div class="blue-box">
+        <h2>홍*동님, 멤버십을 최대한 활용해 보세요!</h2>
+        <p>멤버십으로 더 많은 배송·콘텐츠·할인 혜택을 이용할 수 있습니다.</p>
+        <button class="big-yellow-btn">혜택 둘러보기</button>
+      </div>
+      <div class="upcoming">
+        <h2>곧 이용할 수 있는 혜택</h2>
+        <div class="game-card">게임·영상<br>신규 콘텐츠</div>
+      </div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <!-- 3. 관리 메뉴 -->
+  <div id="manage" class="screen">
+    <div class="scroll">
+      <div class="top"><span class="back" onclick="go('member')">←</span><div class="search"><span class="mag">⌕</span><span>서비스 검색</span><span class="right">⌘ 🎙</span></div></div>
+      <div class="profile">
+        <div class="avatar"></div>
+        <div><div><span class="member-check">✓ member+</span></div><div class="profile-name">홍*동</div><div style="font-size:20px">무료 체험 6일 남음</div></div>
+      </div>
+      <div class="gray-select">멤버십 관리, 해지 및 기타 ▴</div>
+
+      <div class="menu-row"><div><div class="label">멤버십 플랜</div><h3>7일 체험 $1.99</h3><div class="sub">다른 플랜 보기</div></div><b>›</b></div>
+      <div class="menu-row"><div><div class="label">갱신일</div><h3>2026년 7월 5일</h3><div class="sub">결제수단 업데이트</div></div><b>›</b></div>
+      <div class="menu-row" onclick="go('endInfo')" style="cursor:pointer"><div><div class="label">관리</div><h3>멤버십</h3><div class="sub">업데이트, 해지 및 기타</div></div><b>›</b></div>
+
+      <div class="blue-box">
+        <h2>홍*동님, 멤버십을 최대한 활용해 보세요!</h2>
+        <p>멤버십의 주요 혜택을 지금 확인할 수 있습니다.</p>
+        <button class="big-yellow-btn">혜택 둘러보기</button>
+      </div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <!-- 4. 멤버십 해지 안내 -->
+  <div id="endInfo" class="screen">
+    <div class="scroll">
+      <div class="top"><span class="back" onclick="go('manage')">←</span><div class="search"><span class="mag">⌕</span><span>서비스 검색</span><span class="right">⌘ 🎙</span></div></div>
+      <div class="backline">&lt; 뒤로</div>
+      <div class="simple-section">
+        <h2>멤버십 공유</h2>
+        <h1 style="font-size:27px;margin:4px 0 18px">혜택을 공유하세요</h1>
+        <button class="outline-btn">가족 멤버십 관리</button>
+      </div>
+      <div class="simple-section">
+        <h2>갱신 전 알림 받기</h2>
+        <div class="checkbox-row"><div class="checkbox"></div><div>갱신일 3일 전인 2026년 7월 2일에 알림을 받겠습니다.</div></div>
+      </div>
+      <div class="simple-section">
+        <h2>멤버십 종료</h2>
+        <p>해지하려면 아래의 ‘멤버십 해지’를 누르고 이어지는 안내를 따라 주세요. 해지하면 추가 구독과 모든 멤버십 혜택에 대한 접근 권한을 잃게 됩니다.</p>
+        <button class="outline-btn" onclick="go('confirm')">멤버십 해지</button>
+      </div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <!-- 5. 첫 해지 확인 -->
+  <div id="confirm" class="screen">
+    <div class="scroll">
+      <div class="top"><span class="back" onclick="go('endInfo')">←</span><div class="search"><span class="mag">⌕</span><span>서비스 검색</span><span class="right">⌘ 🎙</span></div></div>
+      <div class="backline">&lt; 멤버십 관리</div>
+      <div class="cancel-title">멤버십 해지를 확인해 주세요</div>
+      <div class="plan-card">
+        <div class="name">홍*동</div>
+        <div class="label">현재 플랜</div>
+        <div class="value">7일 체험 $1.99</div>
+        <div class="label">다음 결제일</div>
+        <div class="value">2026년 7월 5일</div>
+      </div>
+      <div class="radio-card">
+        <div class="radio-title"><span class="radio on"></span><div>오늘 해지 2026년 6월 28일<br>($1.99 환불)</div></div>
+        <div class="radio-body">
+          멤버십 혜택은 즉시 종료됩니다.<br><br>
+          $1.99가 환불됩니다. 환불은 일반적으로 영업일 기준 3–5일 이내 처리됩니다.
+          <div class="loss"><div class="x">×</div><div>해지하면 기기에서 AI 보조 기능 전체 접근 권한을 잃게 됩니다.</div></div>
+          <div class="loss"><div class="x">×</div><div>아직 사용하지 않은 회원 전용 혜택을 더 이상 받을 수 없습니다.</div></div>
+        </div>
+      </div>
+      <div style="height:130px"></div>
+      <div class="final-actions">
+        <button class="outline-btn" onclick="go('benefits')">갱신 알림 설정</button>
+        <button class="outline-btn" onclick="go('home')">멤버십 유지</button>
+        <button class="big-yellow-btn" onclick="go('benefits')">해지 계속하기</button>
+      </div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <!-- 6. 혜택 유지 유도 -->
+  <div id="benefits" class="screen">
+    <div class="scroll">
+      <div class="top"><span class="back" onclick="go('confirm')">←</span><div class="search"><span class="mag">⌕</span><span>서비스 검색</span><span class="right">⌘ 🎙</span></div></div>
+      <div class="backline">&lt; 멤버십 관리</div>
+      <div class="benefit-head">홍*동님, 다음 결제일까지 멤버십 혜택을 누릴 수 있는 시간이 <span class="blue">아직 6일 남아 있습니다</span></div>
+      <div style="padding:0 20px 24px"><button class="outline-btn">오늘 멤버십 혜택 이용하기</button></div>
+      <div class="benefit-grid">
+        <div class="benefit-card"><div class="img">📦</div><h3>빠른 무료배송</h3><p>수많은 상품에 빠르고 무료인 배송 혜택</p></div>
+        <div class="benefit-card"><div class="img">▶</div><h3>영상 콘텐츠</h3><p>오리지널 콘텐츠, 영화, TV 프로그램과 라이브 이벤트</p></div>
+        <div class="benefit-card"><div class="img">🎧</div><h3>음악 혜택</h3><p>광고 없는 음악과 인기 팟캐스트</p></div>
+        <div class="benefit-card"><div class="img">🍽</div><h3>식료품 혜택</h3><p>식료품 배송비 할인 및 전용 절약 혜택</p></div>
+        <div class="benefit-card"><div class="img">🎁</div><h3>전용 특가</h3><p>수천 개 상품에서 회원 전용 할인</p></div>
+        <div class="benefit-card"><div class="img">AI+</div><h3>AI 보조 기능</h3><p>더 스마트한 AI 보조 기능 전체 접근</p></div>
+      </div>
+      <div class="button-stack">
+        <button class="big-yellow-btn">갱신 알림 설정</button>
+        <button class="big-yellow-btn">다른 플랜 보기</button>
+        <button class="big-yellow-btn" onclick="go('final')">해지 계속하기</button>
+        <div class="blue-link">멤버십 이용약관</div>
+      </div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <!-- 7. 최종 해지 버튼 -->
+  <div id="final" class="screen">
+    <div class="scroll">
+      <div class="top"><span class="back" onclick="go('benefits')">←</span><div class="search"><span class="mag">⌕</span><span>서비스 검색</span><span class="right">⌘ 🎙</span></div></div>
+      <div class="backline">&lt; 멤버십 관리</div>
+      <div class="cancel-title">멤버십 종료 전 마지막으로 확인해 주세요</div>
+      <div class="radio-card">
+        <div class="radio-title"><span class="radio"></span><div>갱신일에 해지<br>2026년 7월 5일</div></div>
+      </div>
+      <div class="final-actions">
+        <button class="outline-btn">갱신 알림 설정</button>
+        <button class="outline-btn" onclick="go('home')">멤버십 유지</button>
+        <button class="big-yellow-btn" onclick="go('done')">지금 멤버십 종료</button>
+      </div>
+      <div class="help-box">
+        <h2>도움이 필요하신가요?</h2>
+        <div class="help-inner">
+          <h3>도움말 페이지 방문</h3>
+          <p>인기 도움말 주제를 확인하거나 고객지원에 문의할 수 있습니다.</p>
+          <button class="white-btn">도움 받기</button>
+        </div>
+      </div>
+      <div class="blue-link">멤버십 이용약관</div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <!-- 8. 해지 완료 -->
+  <div id="done" class="screen">
+    <div class="scroll">
+      <div class="top"><span class="back" onclick="go('home')">←</span><div class="search"><span class="mag">⌕</span><span>서비스 검색</span><span class="right">⌘ 🎙</span></div></div>
+      <div class="profile" style="padding-top:28px">
+        <div class="avatar"></div>
+        <div><div class="profile-name">홍*동</div><div style="font-size:20px">더 이상 멤버십 회원이 아닙니다.</div></div>
+      </div>
+      <div class="done-card">
+        <div class="check">✓</div>
+        <div><h2>해지 완료</h2><p>멤버십이 해지되었습니다. 언제든지 다시 가입할 수 있습니다.</p></div>
+      </div>
+      <div class="rejoin">
+        <h2>멤버십 혜택을 지금은 표시할 수 없습니다</h2>
+        <p>하지만 다른 방법으로 혜택을 다시 찾을 수 있습니다.</p>
+        <div class="more">자세히 보기 ›</div>
+      </div>
+      <div class="help-box">
+        <h2>지원 찾기</h2>
+        <div class="help-inner">
+          <p>주문, 결제, 멤버십 등에 도움이 필요하신가요?</p>
+          <button class="white-btn">도움말 페이지 방문</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const guideMap = {
+  home:{ title:'앱 홈 화면 확인', desc:'이 서비스의 앱 홈 화면입니다.', action:"👉 '관리' 탭을 눌러 다음 화면으로 이동해 주세요." },
+  member:{ title:'멤버십 요약 확인', desc:'가입 중인 멤버십 요약 정보를 확인하는 화면입니다.', action:"👉 '멤버십 관리, 해지 및 기타'를 눌러 다음 화면으로 이동해 주세요." },
+  manage:{ title:'멤버십 관리 메뉴 확인', desc:'멤버십 관련 관리 메뉴가 있는 화면입니다.', action:"👉 '관리' 항목을 눌러 다음 화면으로 이동해 주세요." },
+  endInfo:{ title:'멤버십 해지 안내 확인', desc:'멤버십 해지 관련 안내 화면입니다. 내용을 자유롭게 살펴봐 주세요.', action:"👉 확인이 끝나면 '멤버십 해지' 버튼을 눌러 다음 화면으로 이동해 주세요." },
+  confirm:{ title:'해지 내용 확인', desc:'해지 내용을 확인하는 화면입니다.', action:"👉 내용을 확인하신 후 '해지 계속하기' 버튼을 눌러 다음 화면으로 이동해 주세요." },
+  benefits:{ title:'멤버십 혜택 확인', desc:'멤버십 혜택을 안내하는 화면입니다.', action:"👉 확인이 끝나면 '해지 계속하기' 버튼을 눌러 다음 화면으로 이동해 주세요." },
+  final:{ title:'해지 여부 최종 확인', desc:'멤버십 종료 여부를 마지막으로 확인하는 화면입니다.', action:"👉 '지금 멤버십 종료' 버튼을 눌러 해지를 완료해 주세요." },
+  done:{ title:'해지 완료 확인', desc:'멤버십 해지가 완료된 결과 화면입니다.', action:"👉 화면 내용을 확인해 주세요." }
+};
+function updateGuide(id){
+  const g = guideMap[id]; if(!g) return;
+  document.getElementById('guideStep').textContent = g.title;
+  document.getElementById('guideDesc').textContent = g.desc;
+  document.getElementById('guideAction').textContent = g.action;
+}
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  updateGuide(id);
+}
+</script>
+</body>
+</html>

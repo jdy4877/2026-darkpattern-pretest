@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<title>특정옵션 사전선택 없음 — 해외형 플랫폼 현재 조건</title>
+<style>
+:root{
+  --blue:#2563eb;
+  --navy:#1f2d3d;
+  --yellow:#ffdc35;
+  --orange:#f59e0b;
+  --text:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --bg:#f4f5f7;
+}
+*{box-sizing:border-box;scrollbar-width:none!important;-ms-overflow-style:none!important}
+*::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+body{margin:0;background:#d7d7d7;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;color:var(--text)}
+.phone{width:390px;max-width:100%;min-height:100vh;margin:0 auto;background:#fff;position:relative;box-shadow:0 0 22px rgba(0,0,0,.18);overflow:hidden}
+.status{height:28px;padding:6px 14px;font-size:13px;font-weight:800;display:flex;justify-content:space-between;background:var(--blue);color:#fff}
+.screen{display:none;min-height:calc(100vh - 28px);background:#fff}
+.screen.active{display:block}
+.scroll{height:calc(100vh - 28px);overflow-y:auto;overflow-x:hidden;padding-bottom:78px}
+.top{height:70px;background:var(--blue);display:flex;align-items:center;gap:10px;padding:10px 14px;position:sticky;top:0;z-index:6}
+.back{font-size:30px;color:#fff;cursor:pointer}
+.search{flex:1;height:46px;background:#fff;border-radius:12px;display:flex;align-items:center;gap:10px;padding:0 12px;color:#444;font-size:17px;border:1px solid rgba(0,0,0,.16)}
+.search .mag{font-size:23px;color:#111}.search .right{margin-left:auto;color:#111;font-size:22px}
+.filter-row{display:flex;gap:9px;overflow:auto;padding:10px 10px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:70px;z-index:5}
+.filter{border:1px solid #cfd3d8;border-radius:13px;padding:9px 14px;white-space:nowrap;background:#fff;font-size:15px;font-weight:700}
+.list-card{display:flex;gap:14px;padding:18px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+.list-img{width:150px;height:165px;background:#f4f4f4;position:relative;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.ticket-box{width:125px;height:84px;background:#f9fafb;border:1px solid #ddd;box-shadow:-8px 8px 0 #111;position:relative;display:flex;align-items:center;justify-content:center;transform:rotate(-2deg)}
+.ticket-box:before{content:"";position:absolute;left:19px;top:18px;width:88px;height:38px;background:linear-gradient(135deg,#93c5fd,#34d399 65%,#fde68a);border:4px solid #fff;box-shadow:0 0 0 1px #d1d5db}
+.ticket-box:after{content:"1 TICKET";position:absolute;left:16px;bottom:8px;font-size:11px;font-weight:900;color:#111}
+.add-photo{position:absolute;left:12px;bottom:12px;width:42px;height:42px;border-radius:50%;background:#fff;border:1px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:21px}
+.list-info{flex:1}.sponsored{text-align:right;color:#666;font-size:12px}.brand{font-size:12px;color:#555;font-weight:700}
+.prod-title{font-size:16px;line-height:1.35;margin:8px 0}.star{color:#f97316;font-weight:800}.price{font-size:37px;letter-spacing:-1px;margin:8px 0}.price small{font-size:18px;vertical-align:top}
+.delivery{font-size:15px;line-height:1.35}.link{color:#1677a8;font-weight:700}
+.list-btn{height:46px;border:0;border-radius:999px;background:var(--yellow);font-size:17px;font-weight:800;width:100%;margin-top:18px}
+.store{display:flex;align-items:center;gap:10px;padding:10px 16px}.store-logo{width:42px;height:42px;border-radius:50%;background:#f3f4f6;border:1px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900}
+.rating{margin-left:auto;color:#f97316;font-size:13px}
+.detail-title{padding:0 16px;font-size:18px;line-height:1.38}
+.hero{height:470px;background:#fff;display:flex;align-items:center;justify-content:center;position:relative}
+.big-ticket{width:315px;height:215px;background:#fafafa;border:1px solid #ddd;box-shadow:-12px 12px 0 #111;position:relative;transform:rotate(-2deg)}
+.big-ticket .brandname{position:absolute;top:14px;left:0;right:0;text-align:center;font-family:cursive;font-size:30px;font-weight:800}
+.big-ticket .photo{position:absolute;left:34px;top:58px;width:245px;height:92px;background:linear-gradient(135deg,#93c5fd,#22c55e 55%,#eab308);border:7px solid #fff;box-shadow:0 0 0 1px #ddd}
+.big-ticket .photo:before{content:"NAMI ISLAND";position:absolute;left:40px;top:28px;font-weight:900;font-size:22px;color:#064e3b}
+.big-ticket .count{position:absolute;left:28px;bottom:22px;font-size:24px;font-weight:900}
+.big-ticket .sub{position:absolute;right:28px;bottom:26px;font-size:11px;color:#444}
+.dots{text-align:center;font-size:22px;letter-spacing:7px;color:#aaa;margin-top:-18px}.dots span:first-child{color:#111}
+.favshare{display:flex;gap:30px;justify-content:flex-end;padding:0 28px 12px;font-size:31px}
+.detail-price{padding:0 16px 10px}.detail-price .price{font-size:46px}
+.notice-line{padding:0 16px 14px;font-size:17px;line-height:1.45}
+.option-section{border-top:8px solid #f3f4f7;padding:16px}
+.option-title{font-size:20px;font-weight:900;margin-bottom:12px}
+.option-card{border:2px solid #1677a8;background:#f0f9ff;border-radius:12px;padding:14px;margin:10px 0;display:flex;justify-content:space-between;gap:12px}
+.option-card .name{font-size:17px;font-weight:900}.option-card .desc{font-size:13px;color:#666;margin-top:4px}
+.option-card .oprice{font-size:18px;font-weight:900;white-space:nowrap}
+.qtybox{border:1px solid #bbb;border-radius:10px;padding:14px;margin:16px 0;font-size:18px;display:flex;justify-content:space-between}
+.btn{width:100%;height:54px;border:0;border-radius:999px;font-size:18px;font-weight:800;margin:7px 0;cursor:pointer}
+.btn-yellow{background:var(--yellow)}.btn-orange{background:var(--orange)}
+.spec{border-top:1px solid var(--line);padding:14px 16px 26px}.spec-row{display:flex;margin:10px 0}.spec-row span:first-child{width:110px;color:#6b7280}
+.nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:390px;max-width:100%;height:62px;background:#fff;border-top:1px solid #ddd;display:flex;align-items:center;justify-content:space-around;z-index:10;color:#111}
+.nav div{text-align:center;font-size:25px}.nav small{display:block;font-size:10px;color:#777}
+.address-top{height:58px;background:var(--blue);display:flex;align-items:center;padding:0 14px;color:#fff;gap:12px}.address-title{font-size:21px;font-weight:900}
+.addr-content{padding:20px 16px}.addr-card{background:#f3f4f6;border-radius:8px;padding:16px;display:flex;gap:12px}.radio{width:28px;height:28px;border-radius:50%;border:3px solid #bbb;position:relative;flex:0 0 auto;margin-top:24px}.radio.on{border-color:#1f76b5}.radio.on:after{content:"";position:absolute;width:12px;height:12px;background:#1f76b5;border-radius:50%;left:5px;top:5px}
+.addr-card h3{font-size:20px;margin:0 0 8px}.addr-card p{font-size:17px;line-height:1.35;margin:0}
+.outline{height:46px;border:1px solid #999;border-radius:999px;background:#fff;font-size:17px;font-weight:700;width:100%;margin:12px 0}.deliver-btn{height:54px;border:0;border-radius:999px;background:var(--yellow);font-size:17px;font-weight:900;width:100%;margin:16px 0}
+.order-top{height:60px;background:var(--blue);color:#fff;display:flex;align-items:center;padding:0 14px;gap:12px}.order-title{font-size:22px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.order{height:calc(100vh - 88px);overflow-y:auto;background:#fff;padding-bottom:90px}
+.notice{padding:18px 16px;font-size:15px;line-height:1.55;border-bottom:1px solid #ddd}.place{width:calc(100% - 32px);height:54px;margin:12px 16px 18px;border:0;border-radius:999px;background:var(--yellow);font-size:18px;font-weight:900}
+.summary{border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:14px 16px}.money-row{display:flex;justify-content:space-between;margin:9px 0;font-size:17px}.money-row.total{font-size:22px;font-weight:900}
+.converter{padding:16px;border-bottom:1px solid #ddd}.converter h3{font-size:20px;margin:0 0 6px}.radio-row{display:flex;gap:10px;align-items:center;margin:18px 0;font-size:18px}
+.card{padding:16px;border-bottom:1px solid #ddd}.card h3{font-size:21px;margin:0 0 10px}.card p{font-size:16px;line-height:1.42}
+.item-box{display:flex;gap:12px;background:#f7f7f7;border-radius:8px;padding:12px;margin-top:12px}.mini-ticket{width:92px;height:70px;background:#fafafa;border:1px solid #ddd;box-shadow:-4px 4px 0 #111;position:relative;flex:0 0 auto}.mini-ticket:before{content:"";position:absolute;left:13px;top:16px;width:62px;height:28px;background:linear-gradient(135deg,#93c5fd,#22c55e 60%,#facc15);border:3px solid #fff}.mini-ticket:after{content:"1 TICKET";position:absolute;left:11px;bottom:5px;font-size:8px;font-weight:900}
+.qty{display:inline-flex;align-items:center;gap:24px;border:3px solid var(--yellow);border-radius:999px;padding:5px 12px;margin-top:12px;font-size:18px}
+.sticky{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:390px;max-width:100%;background:#fff;border-top:1px solid #ddd;padding:10px 14px;z-index:9}
+.done{padding:40px 18px;text-align:center}.check{font-size:56px;color:#15803d}.done h1{font-size:26px}.done-card{text-align:left;border:1px solid #ddd;border-radius:12px;padding:18px;margin:22px 0}
+body{display:flex;flex-direction:column;align-items:center}
+.guide{all:unset;box-sizing:border-box;display:block;position:sticky;top:0;z-index:200;width:390px;max-width:100%;background:#fff;padding:14px 18px 16px;box-shadow:0 3px 10px rgba(0,0,0,.12);border-bottom:1px solid #e2e4e8}
+.guide .gtitle{all:unset;display:block;font-size:16px;font-weight:900;margin:0 0 6px;color:#151515}
+.guide .desc{all:unset;display:block;font-size:13.5px;line-height:1.55;color:#333}
+.guide .action{all:unset;display:block;margin-top:10px;padding:9px 12px;background:#f4f6f8;border-radius:9px;font-size:13px;color:#237bd3;font-weight:700}
+</style>
+</head>
+<body>
+<div class="guide" id="guide">
+  <div class="gtitle" id="guideStep">상품 목록 확인</div>
+  <div class="desc" id="guideDesc">입장권 상품 목록 화면입니다. 목록에 나타난 상품들을 살펴보시고, 구매를 진행하고 싶은 상품을 선택해 주세요.</div>
+  <div class="action" id="guideAction">👉 '남이섬 입장권' 상품을 눌러 다음 화면으로 이동해 주세요.</div>
+</div>
+<div class="phone">
+  <div class="status"><span>17:08</span><span>Wi‑Fi 67</span></div>
+
+  <div id="list" class="screen active">
+    <div class="scroll">
+      <div class="top">
+        <span class="back">←</span>
+        <div class="search"><span class="mag">⌕</span><span>입장권</span><span class="right">⌘ 🎙</span></div>
+      </div>
+      <div class="filter-row">
+        <div class="filter">☷ 필터</div>
+        <div class="filter">★★★★ & 이상</div>
+        <div class="filter">20,000원 이하</div>
+        <div class="filter">입장권</div>
+        <div class="filter">배송 옵션</div>
+      </div>
+
+      <div class="list-card" onclick="go('detail')">
+        <div class="list-img">
+          <div class="ticket-box"></div>
+          <div class="add-photo">▣</div>
+        </div>
+        <div class="list-info">
+          <div class="sponsored">광고 ⓘ</div>
+          <div class="brand">TICKETBOX</div>
+          <div class="prod-title">[경기 가평] 남이섬 입장권 (~26.07.31)</div>
+          <div class="star">5.0 ★★★★★ <span style="color:#444">(1)</span></div>
+          <div class="price">$12<small>35</small></div>
+          <div class="delivery">회원은 7월 1일 무료배송<br>일반 이용자는 7월 3일 무료배송</div>
+          <button class="list-btn">장바구니 담기</button>
+        </div>
+      </div>
+
+      <div class="list-card">
+        <div class="list-img" style="background:linear-gradient(135deg,#dbeafe,#fde68a 55%,#86efac)">
+          <div class="ticket-box" style="transform:scale(.84);box-shadow:-6px 6px 0 #333"></div>
+          <div class="add-photo">▣</div>
+        </div>
+        <div class="list-info">
+          <div class="brand">SEOULLAND PASS</div>
+          <div class="prod-title">서울랜드 자유이용권 온라인 예매권, 종일 이용 입장권</div>
+          <div class="star">4.8 ★★★★☆ <span style="color:#444">(128)</span></div>
+          <div class="price">$22<small>70</small></div>
+          <div class="delivery">회원은 7월 1일 무료배송<br>일반 이용자는 7월 3일 무료배송</div>
+          <button class="list-btn">장바구니 담기</button>
+        </div>
+      </div>
+
+      <div class="list-card">
+        <div class="list-img" style="background:linear-gradient(135deg,#fae8ff,#c4b5fd 50%,#93c5fd)">
+          <div class="ticket-box" style="transform:scale(.84);box-shadow:-6px 6px 0 #333"></div>
+          <div class="add-photo">▣</div>
+        </div>
+        <div class="list-info">
+          <div class="brand">LEGOLAND KOREA</div>
+          <div class="prod-title">레고랜드 코리아 1일 이용권, 날짜 지정형 입장권</div>
+          <div class="star">4.9 ★★★★★ <span style="color:#444">(68)</span></div>
+          <div class="price">$25<small>30</small></div>
+          <div class="delivery">회원은 7월 2일 무료배송<br>일반 이용자는 7월 4일 무료배송</div>
+          <button class="list-btn">장바구니 담기</button>
+        </div>
+      </div>
+
+      <div class="list-card">
+        <div class="list-img" style="background:linear-gradient(135deg,#bfdbfe,#67e8f9 45%,#f0abfc)">
+          <div class="ticket-box" style="transform:scale(.84);box-shadow:-6px 6px 0 #333"></div>
+          <div class="add-photo">▣</div>
+        </div>
+        <div class="list-info">
+          <div class="brand">BUSAN SKY PASS</div>
+          <div class="prod-title">부산 엑스더스카이 전망대 입장권, 즉시 사용 가능 모바일 티켓</div>
+          <div class="star">4.7 ★★★★☆ <span style="color:#444">(205)</span></div>
+          <div class="price">$12<small>90</small></div>
+          <div class="delivery">회원은 7월 1일 무료배송<br>일반 이용자는 7월 3일 무료배송</div>
+          <button class="list-btn">장바구니 담기</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <div id="detail" class="screen">
+    <div class="scroll">
+      <div class="top">
+        <span class="back" onclick="go('list')">←</span>
+        <div class="search"><span class="mag">⌕</span><span>서비스 검색</span><span class="right">⌘ 🎙</span></div>
+      </div>
+
+      <div class="store">
+        <div class="store-logo">TB</div>
+        <div><b>TICKETBOX</b><br><span class="link">스토어 방문</span></div>
+        <div class="rating">5.0 ★★★★★ (1)</div>
+      </div>
+
+      <div class="detail-title">
+        TICKETBOX 남이섬 입장권 (~26.07.31)
+      </div>
+
+      <div class="hero">
+        <div class="big-ticket">
+          <div class="brandname">Ticketbox+</div>
+          <div class="photo"></div>
+          <div class="count">1 TICKET</div>
+          <div class="sub">남이섬 입장권 · 온라인 예약</div>
+        </div>
+      </div>
+      <div class="dots"><span>●</span> ● ● ● ●</div>
+      <div class="favshare">♡ ⤴</div>
+
+      <div class="detail-price">
+        <div class="price">$12<small>35</small></div>
+      </div>
+      <div class="notice-line">
+        성인·청소년·어린이 모두 동일한 입장권으로 이용 가능합니다.<br>
+        선택 과정에서 추가요금이 발생하지 않습니다.
+      </div>
+
+      <div class="option-section">
+        <div class="option-title">옵션 선택</div>
+        <div class="option-card">
+          <div>
+            <div class="name">남이섬 입장권 1매</div>
+            <div class="desc">성인/청소년/어린이 동일가 · 추가요금 없음</div>
+          </div>
+          <div class="oprice">$12.35</div>
+        </div>
+        <div class="qtybox"><span>수량: 1</span><span>⌄</span></div>
+        <button class="btn btn-yellow">장바구니 담기</button>
+        <button class="btn btn-orange" onclick="go('address')">바로구매</button>
+      </div>
+
+      <div class="spec">
+        <div class="spec-row"><span>판매자</span><span class="link">TICKETBOX US INC</span></div>
+        <div class="spec-row"><span>이용권</span><b>남이섬 입장권 1매</b></div>
+        <div class="spec-row"><span>요금</span><span>성인/청소년/어린이 동일가</span></div>
+        <div class="spec-row"><span>환불</span><span class="link">30일 환불/교환</span></div>
+      </div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <div id="address" class="screen">
+    <div class="scroll">
+      <div class="address-top"><span class="back" onclick="go('detail')">‹</span><span class="address-title">배송 주소 선택</span></div>
+      <div class="addr-content">
+        <h2>전체 주소 (1)</h2>
+        <div class="addr-card">
+          <span class="radio on"></span>
+          <div>
+            <h3>홍*동</h3>
+            <p>[1234*] 서울특별시 종로구 성균관로 *** ***동 ***호<br>대한민국<br>전화번호: 010-****-1234</p>
+            <button class="deliver-btn" onclick="go('checkout')">이 주소로 배송</button>
+            <button class="outline">주소 수정</button>
+          </div>
+        </div>
+        <hr style="margin:24px 0;border:0;border-top:1px solid #ddd">
+        <h2>배송 주소 추가</h2>
+        <button class="outline">새 배송 주소 추가</button>
+        <div style="text-align:center;color:#777;margin:26px 0">또는</div>
+        <div class="link" style="text-align:center;font-size:18px">장바구니로 돌아가기</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="checkout" class="screen">
+    <div class="order-top"><span class="back" onclick="go('address')">‹</span><span class="order-title">주문하기</span></div>
+    <div class="order">
+      <div class="notice">
+        주문을 완료하면 서비스의 개인정보 처리방침 및 이용조건에 동의하는 것으로 간주됩니다.<br>
+        또한 글로벌 배송 서비스의 약관에 동의합니다.
+      </div>
+      <button class="place" onclick="go('done')">원화(KRW)로 주문하기</button>
+
+      <div class="summary">
+        <div class="money-row"><span>상품 금액:</span><span>KRW 19,000</span></div>
+        <div class="money-row"><span>배송 및 처리비:</span><span>KRW 3,000</span></div>
+        <div class="money-row"><span>무료배송 프로모션:</span><span>-KRW 3,000</span></div>
+        <div class="money-row"><span>세전 합계:</span><span>KRW 19,000</span></div>
+        <div class="money-row"><span>예상 세금:</span><span>KRW 0</span></div>
+        <div class="money-row"><span class="link">환율 적용 내역:⌄</span><span>KRW 0</span></div>
+        <div class="money-row total"><span>주문 총액:</span><span>KRW 19,000</span></div>
+      </div>
+
+      <div class="converter">
+        <h3>통화 변환기</h3>
+        <div>사용 중 - 원화로 결제</div>
+        <div class="radio-row"><span class="radio on"></span><span>KRW 19,000.00</span></div>
+        <div class="radio-row"><span class="radio"></span><span>USD 12.35</span></div>
+        <div class="link">결제 통화 변경</div>
+        <p><b>환율</b><br>1 USD = 1538.46 KRW</p>
+        <div class="link">통화 변환기란 무엇인가요?</div>
+      </div>
+
+      <div class="card">
+        <h3>Mastercard 3390으로 결제</h3>
+        <div class="link">결제수단 변경</div><br>
+        <div class="link">결제 플랜 선택</div><br>
+        <div class="link">기프트카드, 바우처 또는 프로모션 코드 사용</div>
+      </div>
+
+      <div class="card">
+        <h3>배송지</h3>
+        <p>홍*동<br>[1234*] 서울특별시 종로구 성균관로 *** ***동 ***호<br>대한민국</p>
+        <div class="link">배송 주소 변경</div>
+      </div>
+
+      <div class="card">
+        <h3>도착 예정: 2026년 7월 3일</h3>
+        <div class="radio-row"><span class="radio on"></span><span><b>금요일, 7월 3일</b><br>무료 글로벌 빠른 배송</span></div>
+        <div class="item-box">
+          <div class="mini-ticket"></div>
+          <div>
+            <b>TICKETBOX 남이섬 입장권</b><br>
+            1매 입장권 · 성인/청소년/어린이 동일가<br>
+            <b>KRW 19,000</b><br><br>
+            배송: 글로벌 배송 서비스<br>
+            판매자: <span class="link">TICKETBOX US INC</span>
+            <div class="qty">🗑 <b>1</b> +</div>
+          </div>
+        </div>
+        <div class="link" style="margin-top:12px">선물 옵션 추가</div>
+      </div>
+
+      <div class="notice">
+        주문 버튼을 누르면 주문 확인 이메일이 발송됩니다. 이용권은 결제 후 온라인 예약을 통해 사용할 수 있습니다.
+      </div>
+    </div>
+    <div class="sticky"><button class="btn btn-yellow" onclick="go('done')">원화(KRW)로 주문하기</button></div>
+  </div>
+
+  <div id="done" class="screen">
+    <div class="scroll">
+      <div class="order-top"><span class="back" onclick="go('detail')">‹</span><span class="order-title">주문 완료</span></div>
+      <div class="done">
+        <div class="check">✓</div>
+        <h1>주문이 완료되었습니다</h1>
+        <div class="done-card">
+          <h3>남이섬 입장권 1매</h3>
+          <p>성인/청소년/어린이 동일가로 결제되었습니다.</p>
+          <div class="money-row total"><span>총 결제금액</span><span>KRW 19,000</span></div>
+        </div>
+        <button class="btn btn-yellow" onclick="go('list')">처음으로 돌아가기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const guideMap = {
+  list:{ title:'상품 목록 확인', desc:'입장권 상품 목록 화면입니다. 목록에 나타난 상품들을 살펴보시고, 구매를 진행하고 싶은 상품을 선택해 주세요.', action:"👉 '남이섬 입장권' 상품을 눌러 다음 화면으로 이동해 주세요." },
+  detail:{ title:'상품 상세 확인', desc:'선택하신 상품의 상세 정보를 확인하는 화면입니다. 내용을 자유롭게 살펴봐 주세요.', action:"👉 확인이 끝나면 화면 하단의 '바로구매' 버튼을 눌러 다음 화면으로 이동해 주세요." },
+  address:{ title:'배송 주소 확인', desc:'배송 받을 주소를 확인하는 화면입니다.', action:"👉 '이 주소로 배송' 버튼을 눌러 다음 화면으로 이동해 주세요." },
+  checkout:{ title:'주문 내용 확인', desc:'주문 및 결제 정보를 확인하는 화면입니다.', action:"👉 내용을 확인하신 후 '원화(KRW)로 주문하기' 버튼을 눌러 주세요." },
+  done:{ title:'주문 완료 확인', desc:'주문이 완료된 결과 화면입니다.', action:"👉 화면 내용을 확인해 주세요." }
+};
+function updateGuide(id){
+  const g = guideMap[id]; if(!g) return;
+  document.getElementById('guideStep').textContent = g.title;
+  document.getElementById('guideDesc').textContent = g.desc;
+  document.getElementById('guideAction').textContent = g.action;
+}
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  updateGuide(id);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>플러스 멤버십 해지 — 개선 전</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #c8c8c8;
+  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px 0 40px;
+}
+/* ── 폰 프레임 ── */
+.phone {
+  width: 390px; max-width: 100vw;
+  background: #fff;
+  border-radius: 44px;
+  border: 8px solid #1a1a1a;
+  box-shadow: 0 0 0 2px #333, 0 20px 60px rgba(0,0,0,.4);
+  overflow: hidden;
+  position: relative;
+  min-height: 780px;
+}
+.notch-bar {
+  background: #1a1a1a; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+}
+.notch { width: 100px; height: 22px; background: #1a1a1a; border-radius: 0 0 14px 14px; }
+
+/* 상태바 */
+.status-bar {
+  background: #f0f2f5; padding: 4px 18px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 11px; font-weight: 600; color: #111;
+}
+.status-bar.white { background: #fff; }
+.status-bar.light { background: #f0f2f5; }
+.status-icons { display: flex; align-items: center; gap: 3px; font-size: 10px; }
+
+/* ── 스크린 공통 ── */
+.screen { display: none; }
+.screen.active { display: block; }
+@keyframes fadeUp { from { opacity: .5; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.screen.active { animation: fadeUp .2s ease; }
+
+/* ── 상단 네비 ── */
+.top-nav {
+  background: #fff; padding: 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+}
+.back { font-size: 20px; color: #555; cursor: pointer; padding: 2px 8px 2px 0; }
+.nav-title { font-size: 15px; font-weight: 700; }
+.nav-right { font-size: 11px; color: #aaa; cursor: pointer; }
+
+/* ════════════ 화면별 스타일 ════════════ */
+
+/* S1: 앱 홈 */
+.app-header {
+  background: #f0f2f5; padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.hamburger { font-size: 20px; color: #333; }
+.pay-logo { background: #fff; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; border: 1px solid #ddd; color: #333; }
+.bell { font-size: 20px; color: #333; position: relative; }
+.bell-badge { position: absolute; top: -4px; right: -4px; background: #ff4444; color: #fff; border-radius: 50%; width: 14px; height: 14px; font-size: 8px; display: flex; align-items: center; justify-content: center; }
+.search-bar { margin: 10px 16px; background: #fff; border-radius: 24px; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.n-logo { color: #2f6fed; font-size: 22px; font-weight: 900; }
+.search-dot { width: 20px; height: 20px; background: #2f6fed; border-radius: 50%; }
+.banner-card { margin: 10px 16px; background: #fff; border-radius: 14px; padding: 14px; display: flex; gap: 12px; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,.06); cursor: pointer; }
+.banner-img { width: 72px; height: 58px; background: linear-gradient(135deg, #56ab2f, #a8e063); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.banner-text h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+.banner-text p { font-size: 12px; color: #888; }
+.widget-row { display: flex; gap: 8px; margin: 0 16px 10px; }
+.widget { flex: 1; background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.widget .wt { font-size: 12px; font-weight: 700; }
+.widget .ws { font-size: 11px; color: #888; margin-top: 2px; }
+.clip-bar { margin: 0 16px 12px; background: #fff; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.bottom-tabs {
+  position: sticky; bottom: 0; background: #fff;
+  display: flex; border-top: 1px solid #eee; padding: 8px 0 4px;
+}
+.tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #aaa; cursor: pointer; padding: 4px 0; }
+.tab.active { color: #111; font-weight: 700; }
+.tab-icon { font-size: 20px; }
+.tab-icon.shop-icon { background: linear-gradient(135deg, #7c4dff, #2f6fed); border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; }
+
+/* ── S1/S2 실제 캡처 기반 스타일 ── */
+.pay-logo-real { background: transparent; border: 1.5px solid #333; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #333; }
+.search-bar-real { margin: 14px 16px 18px; background: #fff; border-radius: 28px; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
+.n-logo-real { color: #2f6fed; font-size: 24px; font-weight: 900; }
+.search-dot-real { width: 26px; height: 26px; background: #2f6fed; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.search-dot-real::after { content: ''; width: 9px; height: 9px; border: 2px solid #fff; border-radius: 50%; }
+.banner-card-real { margin: 0 16px 14px; background: transparent; padding: 0; display: flex; gap: 12px; align-items: center; }
+.banner-img-real { width: 96px; height: 76px; background: linear-gradient(135deg, #2a3a2a, #4a6a3a); border-radius: 10px; position: relative; flex-shrink: 0; }
+.banner-text-real h4 { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+.banner-text-real p { font-size: 12px; color: #555; }
+.banner-arrow-real { margin-left: auto; width: 28px; height: 28px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #555; }
+.widget-row-real { display: flex; gap: 8px; margin: 0 16px 10px; }
+.widget-real { flex: 1; background: #fff; border-radius: 12px; padding: 12px 14px; }
+.wt-real { font-size: 14px; font-weight: 700; }
+.ws-real { font-size: 11px; color: #888; margin-top: 3px; }
+.clip-bar-real { margin: 0 16px 14px; background: #fff; border-radius: 24px; padding: 12px 18px; display: flex; align-items: center; gap: 8px; }
+.clip-grid-real { display: flex; gap: 8px; margin: 0 16px 10px; }
+.clip-card-real { flex: 1; }
+.clip-img-real { aspect-ratio: 0.85; border-radius: 10px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px; color: #fff; }
+.clip-img-real.clip1 { background: linear-gradient(160deg, #2a2a2a, #555); }
+.clip-img-real.clip2 { background: linear-gradient(160deg, #444, #777); }
+.clip-loc-tag { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,.5); font-size: 8px; padding: 2px 6px; border-radius: 10px; }
+.clip-title-real { font-size: 11px; font-weight: 800; margin-bottom: 4px; line-height: 1.3; }
+.clip-author-real { font-size: 9px; opacity: .9; }
+.clip-caption-real { font-size: 11px; font-weight: 600; padding: 6px 2px; color: #222; }
+.bottom-tabs-real { position: sticky; bottom: 0; background: #fff; display: flex; border-top: 1px solid #eee; padding: 8px 0 4px; }
+.tab-real { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #aaa; cursor: pointer; padding: 4px 0; }
+.tab-real.active { color: #111; font-weight: 700; }
+.tab-icon-real { font-size: 18px; }
+.shop-icon-real { background: linear-gradient(135deg,#7c4dff,#2f6fed); border-radius: 8px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; }
+
+.my-profile-real { background: #fff; padding: 18px 16px 14px; display: flex; align-items: center; justify-content: space-between; }
+.my-left-real { display: flex; align-items: center; gap: 10px; }
+.avatar-wrap-real { position: relative; }
+.avatar-real { width: 44px; height: 44px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.edit-badge-real { position: absolute; bottom: -1px; right: -1px; width: 16px; height: 16px; background: #fff; border-radius: 50%; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 8px; }
+.my-name-real { font-size: 17px; font-weight: 800; }
+.my-icons-real { display: flex; gap: 18px; }
+.my-icon-real { font-size: 21px; color: #333; cursor: pointer; }
+.mem-banner-real { margin: 0 16px 14px; background: #fff; border: 1px solid #f0f0f0; border-radius: 10px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+.n-badge-real { font-size: 13px; font-weight: 900; }
+.mem-banner-right-real { font-size: 12px; }
+.quick-card-real { margin: 0 16px 14px; background: #fff; border-radius: 16px; padding: 16px 8px 14px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+.quick-icons-real { display: flex; justify-content: space-around; padding-bottom: 14px; border-bottom: 1px solid #f0f0f0; margin-bottom: 12px; }
+.qi-real { display: flex; flex-direction: column; align-items: center; gap: 7px; font-size: 9.5px; color: #555; cursor: pointer; }
+.qi-icon-real { font-size: 22px; }
+.qi-dot { position: absolute; top: -2px; right: -3px; width: 6px; height: 6px; background: #ff4444; border-radius: 50%; }
+.npay-row-real { display: flex; align-items: center; justify-content: space-between; padding: 0 6px; }
+.npay-bal-real { font-size: 15px; font-weight: 900; }
+.npay-btns-real { display: flex; gap: 12px; font-size: 13px; font-weight: 700; color: #555; }
+.npay-btn-real { cursor: pointer; }
+.tab-row-real { display: flex; align-items: center; padding: 0 16px; border-bottom: 1.5px solid #f0f0f0; gap: 0; }
+.tab-item-real { padding: 12px 14px 12px 0; font-size: 18px; color: #ccc; cursor: pointer; border-bottom: 2px solid transparent; }
+.tab-item-real.on { color: #111; border-bottom-color: #111; }
+.tab-text-real { padding: 12px 0; font-size: 13px; font-weight: 700; color: #ccc; margin-left: 16px; cursor: pointer; }
+.tab-text-real:first-of-type { margin-left: auto; color: #111; }
+.empty-box-real { padding: 70px 20px; text-align: center; }
+.empty-box-real h4 { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 8px; }
+.empty-box-real p { font-size: 12px; color: #aaa; }
+
+/* S2: 마이페이지 */
+.my-profile { background: #f8f8f8; padding: 16px; display: flex; align-items: center; justify-content: space-between; }
+.my-left { display: flex; align-items: center; gap: 10px; }
+.avatar-wrap { position: relative; }
+.avatar { width: 44px; height: 44px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.edit-badge { position: absolute; bottom: 0; right: 0; width: 16px; height: 16px; background: #fff; border-radius: 50%; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 8px; }
+.my-name { font-size: 14px; font-weight: 800; }
+.my-id { font-size: 11px; color: #aaa; }
+.my-icons { display: flex; gap: 14px; }
+.my-icon { font-size: 22px; color: #555; cursor: pointer; }
+.mem-banner { margin: 10px 14px; background: #f4f7ff; border: 1px solid #c7d8ff; border-radius: 10px; padding: 11px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.mem-banner-left { display: flex; align-items: center; gap: 8px; }
+.n-badge { background: linear-gradient(90deg, #2f6fed, #5667ff); color: #fff; font-size: 10px; font-weight: 800; border-radius: 4px; padding: 2px 6px; }
+.mem-banner-right { font-size: 12px; color: #2f6fed; font-weight: 700; }
+.quick-icons { padding: 14px 10px; display: flex; justify-content: space-around; }
+.qi { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 10px; color: #555; cursor: pointer; }
+.qi-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; position: relative; }
+.qi-icon.blue { background: #e8f0ff; }
+.qi-icon.teal { background: #e0f7f7; }
+.qi-icon.green { background: #eef4ff; }
+.qi-icon.purple { background: #f0e8ff; }
+.qi-icon.orange { background: #fff3e0; }
+.npay-row { margin: 0 14px 12px; border: 1px solid #eee; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 8px; }
+.npay-bal { font-size: 15px; font-weight: 900; flex: 1; }
+.npay-btns { display: flex; gap: 12px; }
+.npay-btn { font-size: 13px; font-weight: 700; color: #555; cursor: pointer; padding: 0 4px; }
+.tab-row { display: flex; gap: 0; border-bottom: 1.5px solid #eee; margin: 0 14px; }
+.tab-item { flex: 1; text-align: center; padding: 10px 0; font-size: 20px; cursor: pointer; border-bottom: 2px solid transparent; }
+.tab-item.on { border-bottom-color: #111; }
+.tab-text-row { display: flex; gap: 16px; border-bottom: 1px solid #eee; padding: 0 14px; margin-top: 0; }
+.tab-text { font-size: 13px; font-weight: 600; color: #aaa; padding: 8px 0; cursor: pointer; border-bottom: 2px solid transparent; }
+.tab-text.on { color: #111; border-bottom-color: #111; font-weight: 800; }
+.empty-box { padding: 60px 20px; text-align: center; color: #aaa; }
+.empty-box h4 { font-size: 14px; font-weight: 700; color: #555; margin-bottom: 6px; }
+.empty-box p { font-size: 12px; }
+
+/* S3: 마이 멤버십 */
+.mem-detail-header { background: linear-gradient(160deg, #0a1628, #0d2540); padding: 20px 16px 16px; color: #fff; }
+.mem-detail-header .sub { font-size: 11px; color: rgba(255,255,255,.5); margin-bottom: 4px; }
+.mem-detail-header h2 { font-size: 22px; font-weight: 900; margin-bottom: 12px; }
+.mem-detail-header .rate { font-size: 28px; font-weight: 900; color: #2f6fed; }
+.mem-detail-body { padding: 16px; }
+.benefit-row2 { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+.benefit-row2:last-child { border-bottom: none; }
+.br-left { font-size: 13px; font-weight: 600; }
+.br-right { font-size: 12px; color: #2f6fed; font-weight: 700; }
+.settings-btn { margin: 8px 16px; border: 1px solid #ddd; border-radius: 10px; padding: 13px 16px; font-size: 14px; font-weight: 600; color: #333; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.settings-btn:active { background: #f5f5f5; }
+
+/* S4: 설정 */
+.settings-wrap { background: #f5f5f5; min-height: 500px; }
+.settings-section-label { font-size: 12px; color: #888; padding: 16px 16px 8px; font-weight: 600; }
+.settings-item { background: #fff; padding: 15px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f5f5f5; cursor: pointer; font-size: 14px; font-weight: 500; }
+.settings-item.highlight { font-weight: 700; color: #111; }
+.settings-item:active { background: #f8f8f8; }
+.settings-arr { color: #ccc; font-size: 14px; }
+
+/* S5: 해지 MY카드 (개선 전, 실제 캡처 기반) */
+.old-my-mem { padding: 14px 16px 0; }
+.period-chip { background: #eef4ff; color: #1f5fd1; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px; }
+.old-mem-card { border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
+.old-mem-card-head { background: linear-gradient(135deg, #c8eef0, #d4f0ec); color: #111; padding: 12px 14px; display: flex; justify-content: flex-start; align-items: center; gap: 8px; }
+.old-mem-card-body { padding: 12px 14px; }
+.omc-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; color: #666; }
+.omc-row strong { color: #111; font-weight: 700; }
+.omc-section { font-size: 11px; color: #aaa; padding-top: 8px; margin-top: 4px; border-top: 1px solid #f0f0f0; margin-bottom: 4px; }
+.acc-mgmt-note { display: flex; justify-content: space-between; align-items: center; padding: 13px 2px; font-size: 13px; color: #333; border-bottom: 1px solid #f0f0f0; margin-bottom: 14px; cursor: pointer; }
+.action-outline { border: none; border-radius: 10px; padding: 13px; text-align: center; font-size: 14px; font-weight: 700; color: #fff; background: #2f6fed; cursor: pointer; margin-bottom: 10px; }
+.action-red { border: 1.5px solid #2f6fed; border-radius: 10px; padding: 13px; text-align: center; font-size: 14px; font-weight: 700; color: #2f6fed; background: #fff; cursor: pointer; margin-bottom: 20px; }
+.action-red:active { background: #f4f7ff; }
+
+/* S6: "잠시만요" 혜택 화면 (실제 캡처 기반) */
+.retain-real { padding: 16px; }
+.retain-real-greet { font-size: 17px; font-weight: 900; text-align: center; margin-bottom: 6px; }
+.retain-real-sub { font-size: 12px; color: #666; text-align: center; line-height: 1.5; margin-bottom: 16px; }
+.benefit-detail-box { border: 1px solid #eee; border-radius: 12px; padding: 16px; margin-bottom: 14px; background: #fafafa; }
+.bd-real-row { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; font-size: 13px; color: #333; }
+.bd-real-row .amt-em { color: #2f6fed; font-weight: 700; margin-left: 4px; }
+.bd-real-total-label { text-align: center; font-size: 12px; color: #555; margin: 10px 0 4px; }
+.bd-real-total { text-align: center; font-size: 13px; color: #333; }
+.bd-real-total b { font-size: 24px; color: #2f6fed; }
+.bd-check-link { text-align: center; font-size: 12px; color: #888; text-decoration: underline; margin: 14px 0; cursor: pointer; }
+.badge5-wrap { text-align: center; margin: 24px 0 16px; }
+.badge5-circle { width: 70px; height: 70px; border-radius: 50%; background: #2d6cdf; color: #fff; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 14px; }
+.badge5-circle .b5small { font-size: 9px; }
+.badge5-circle .b5big { font-size: 22px; font-weight: 900; }
+.badge5-title { font-size: 17px; font-weight: 900; margin-bottom: 8px; }
+.badge5-sub { font-size: 12px; color: #666; line-height: 1.5; }
+.partner-grid { display: flex; gap: 10px; margin-top: 16px; }
+.partner-card { flex: 1; border: 1px solid #eee; border-radius: 12px; padding: 18px 10px; text-align: center; }
+.partner-card .pc-icon { width: 44px; height: 44px; margin: 0 auto 10px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.partner-card .pc-name { font-size: 12px; font-weight: 600; color: #333; }
+.scroll-cta-wrap { padding: 20px 16px 16px; position: sticky; bottom: 0; background: #fff; border-top: 1px solid #f0f0f0; }
+.scroll-keep-btn { width: 100%; height: 52px; border: none; border-radius: 12px; background: #2f6fed; color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; margin-bottom: 8px; }
+.scroll-proceed { text-align: center; font-size: 12px; color: #aaa; text-decoration: underline; cursor: pointer; }
+
+/* S7: "정말 해지하시겠어요?" (실제 캡처 기반) */
+.confirm-real { padding: 30px 20px; }
+.confirm-real-title { font-size: 18px; font-weight: 900; text-align: center; line-height: 1.4; margin-bottom: 6px; }
+.confirm-real-sub { font-size: 12px; color: #888; text-align: center; margin-bottom: 18px; }
+.confirm-real-period { text-align: center; font-size: 13px; color: #1f5fd1; font-weight: 600; margin-bottom: 18px; }
+.confirm-real-btn { width: 100%; height: 54px; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; margin-bottom: 10px; transition: all .12s; }
+.confirm-real-btn:active { transform: scale(.98); }
+.confirm-real-btn.primary-fill { background: #2f6fed; color: #fff; border: none; }
+.confirm-real-btn.outline-green { background: #fff; color: #2f6fed; border: 1.5px solid #2f6fed; }
+
+/* S6_old: 해지 유형 선택 (개선 전, 보조 단계) */
+.old-cancel-intro { padding: 18px 16px 10px; }
+.days-msg { font-size: 15px; font-weight: 800; line-height: 1.4; margin-bottom: 4px; }
+.days-msg em { color: #2f6fed; font-style: normal; }
+.days-sub { font-size: 12px; color: #aaa; margin-bottom: 14px; }
+.cancel-opt { border: 1.5px solid #eee; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all .12s; }
+.cancel-opt:active { transform: scale(.98); }
+.cancel-opt.green { border-color: #2f6fed; color: #2f6fed; }
+.cancel-opt.gray { border-color: #ddd; color: #555; }
+.cancel-opt.red { border-color: #2f6fed; color: #2f6fed; }
+.note-box { background: #f8f8f8; border-radius: 10px; padding: 12px 14px; margin-top: 4px; }
+.note-box h5 { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+.note-box ul { list-style: none; font-size: 11px; color: #888; line-height: 1.9; }
+.note-box ul li::before { content: '·  '; }
+
+/* S7: 설문 */
+.survey-wrap { padding: 18px 16px; }
+.survey-title { font-size: 16px; font-weight: 800; line-height: 1.4; margin-bottom: 4px; }
+.survey-sub { font-size: 11px; color: #aaa; margin-bottom: 16px; }
+.reason { display: flex; align-items: center; gap: 10px; border: 1px solid #eee; border-radius: 10px; padding: 13px 14px; margin-bottom: 8px; font-size: 13px; cursor: pointer; }
+.reason.sel { border-color: #e84040; background: #fff5f5; color: #c73030; }
+.radio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #ccc; flex-shrink: 0; }
+.reason.sel .radio { border-color: #e84040; background: #e84040; }
+.survey-submit { width: 100%; height: 50px; border: none; border-radius: 10px; background: #e84040; color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 6px; margin-bottom: 8px; }
+.survey-keep { width: 100%; height: 50px; border: none; border-radius: 10px; background: #2f6fed; color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; }
+.skip { text-align: center; font-size: 12px; color: #aaa; margin-top: 10px; text-decoration: underline; cursor: pointer; }
+
+/* S8: 동영상 콘텐츠 광고 */
+.ad-wrap { padding: 16px; }
+.ad-title { font-size: 14px; font-weight: 800; margin-bottom: 14px; }
+.netflix-card { background: linear-gradient(135deg, #141414, #1a1a2e); border-radius: 16px; padding: 22px 16px; text-align: center; color: #fff; margin-bottom: 16px; }
+.nf-emoji { font-size: 40px; margin-bottom: 10px; }
+.nf-title { font-size: 15px; font-weight: 800; margin-bottom: 6px; line-height: 1.4; }
+.nf-sub { font-size: 11px; color: #aaa; }
+.ad-btns { display: flex; gap: 8px; margin-bottom: 8px; }
+.ad-refund { flex: 1; border: 1px solid #ddd; border-radius: 10px; text-align: center; padding: 12px; font-size: 13px; color: #555; cursor: pointer; }
+.ad-stay { flex: 1.5; background: #2f6fed; border-radius: 10px; text-align: center; padding: 12px; font-size: 13px; font-weight: 800; color: #fff; cursor: pointer; }
+.ad-submit { border: 1.5px solid #e84040; border-radius: 10px; text-align: center; padding: 12px; font-size: 13px; font-weight: 700; color: #e84040; cursor: pointer; margin-bottom: 8px; }
+.ad-keep { background: #2f6fed; border-radius: 10px; text-align: center; padding: 12px; font-size: 13px; font-weight: 800; color: #fff; cursor: pointer; margin-bottom: 6px; }
+.ad-skip { text-align: center; font-size: 11px; color: #aaa; margin-top: 4px; text-decoration: underline; cursor: pointer; }
+
+/* S9: 환불 확인 */
+.refund-wrap { padding: 18px 16px; }
+.refund-title { font-size: 16px; font-weight: 800; text-align: center; margin-bottom: 4px; line-height: 1.4; }
+.refund-sub { font-size: 11px; color: #aaa; text-align: center; margin-bottom: 16px; }
+.refund-box { background: #f8f8f8; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+.rf-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; color: #666; }
+.rf-row.hl { border-top: 1px solid #e0e0e0; margin-top: 6px; padding-top: 10px; }
+.rf-row.hl strong { color: #e84040; font-size: 14px; }
+.refund-warn { font-size: 11px; color: #aaa; line-height: 1.8; margin-bottom: 14px; }
+.refund-warn li { list-style: none; padding-left: 10px; position: relative; }
+.refund-warn li::before { content: '·'; position: absolute; left: 0; }
+.refund-confirm { width: 100%; height: 50px; border: 1.5px solid #e84040; border-radius: 10px; background: #fff; color: #e84040; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; margin-bottom: 8px; }
+.refund-keep { width: 100%; height: 50px; border: none; border-radius: 10px; background: #2f6fed; color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; }
+
+/* S10: 완료 */
+.done-wrap { padding: 60px 24px; text-align: center; }
+.done-icon { font-size: 56px; margin-bottom: 18px; }
+.done-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+.done-chip { display: inline-block; background: #fdeaea; border: 1px solid #f0a0a0; border-radius: 16px; padding: 5px 16px; font-size: 12px; color: #e84040; font-weight: 700; margin: 10px 0 14px; }
+.done-sub { font-size: 13px; color: #888; line-height: 1.8; margin-bottom: 32px; }
+.done-btn { width: 100%; height: 52px; border: none; border-radius: 12px; background: #333; color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; }
+
+/* ── 참가자 안내 패널 ── */
+.guide{all:unset;box-sizing:border-box;display:block;position:sticky;top:0;z-index:200;width:390px;max-width:100%;background:#fff;padding:14px 18px 16px;box-shadow:0 3px 10px rgba(0,0,0,.12);border-bottom:1px solid #e2e4e8;margin-bottom:16px}
+.guide .gtitle{all:unset;display:block;font-size:16px;font-weight:900;margin:0 0 6px;color:#151515}
+.guide .desc{all:unset;display:block;font-size:13.5px;line-height:1.55;color:#333}
+.guide .action{all:unset;display:block;margin-top:10px;padding:9px 12px;background:#f4f6f8;border-radius:9px;font-size:13px;color:#237bd3;font-weight:700}
+</style>
+</head>
+<body>
+<div class="guide" id="guide">
+  <div class="gtitle" id="guideStep">앱 홈 화면 확인</div>
+  <div class="desc" id="guideDesc">이 서비스의 앱 홈 화면입니다.</div>
+  <div class="action" id="guideAction">👉 하단의 '마이' 탭을 눌러 다음 화면으로 이동해 주세요.</div>
+</div>
+<div class="phone">
+  <div class="notch-bar"><div class="notch"></div></div>
+
+  <!-- ── S1: 앱 홈 (실제 캡처 기반) ── -->
+  <div class="screen active" id="s1">
+    <div class="status-bar light"><span>SKT 4:02 📳</span><div class="status-icons">🔇 📍 5G ▌▌ 63</div></div>
+    <div class="app-header">
+      <div class="hamburger">☰</div>
+      <div class="pay-logo-real">pay</div>
+      <div class="bell" style="position:relative">🔔<div class="bell-badge">9</div></div>
+    </div>
+    <div class="search-bar-real">
+      <div class="n-logo-real">P</div>
+      <div class="search-dot-real"></div>
+    </div>
+    <div class="banner-card-real">
+      <div class="banner-img-real">
+        <div style="position:absolute;bottom:6px;left:6px;background:#000;color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:2px">ZUMBA</div>
+      </div>
+      <div class="banner-text-real">
+        <h4>이색적인 사이드잡!</h4>
+        <p>부업으로 강사활동하기</p>
+      </div>
+      <span class="banner-arrow-real">›</span>
+    </div>
+    <div class="widget-row-real">
+      <div class="widget-real"><div class="wt-real">구름많음 32.3° ☁️</div><div class="ws-real">압구정동</div></div>
+      <div class="widget-real"><div class="wt-real">1,026.03 <span style="color:#3478f6;font-size:10px">▼2.29%</span></div><div class="ws-real">코스닥</div></div>
+    </div>
+    <div class="clip-bar-real">
+      <span style="color:#7c4dff;font-weight:800;font-size:15px">▶ Clip</span>
+      <span style="font-size:12px;color:#555">모든 것들의 짧은 기록, 클립 프로필</span>
+    </div>
+    <div class="clip-grid-real">
+      <div class="clip-card-real">
+        <div class="clip-img-real clip1">
+          <span class="clip-loc-tag">📍 INCHEON</span>
+          <div class="clip-title-real">티웨이플러스 멤버쉽 사용후기</div>
+          <div class="clip-author-real">😊 희희다이어리</div>
+        </div>
+        <div class="clip-caption-real">티웨이플러스 멤버십 가입 혜</div>
+      </div>
+      <div class="clip-card-real">
+        <div class="clip-img-real clip2">
+          <div class="clip-title-real" style="color:#ffe600">소매치기<br>당했어요..</div>
+          <div class="clip-author-real">😊 제제</div>
+        </div>
+        <div class="clip-caption-real">유럽 여행 갔다가 진짜 식겁했</div>
+      </div>
+    </div>
+    <div class="bottom-tabs-real">
+      <div class="tab-real" onclick="go(2)"><div class="tab-icon-real"><div class="shop-icon-real">P+</div></div><span>쇼핑</span></div>
+      <div class="tab-real active"><div class="tab-icon-real">⌂</div><span>홈</span></div>
+      <div class="tab-real"><div class="tab-icon-real">▤</div><span>투데이</span></div>
+      <div class="tab-real"><div class="tab-icon-real">▶</div><span>클립</span></div>
+      <div class="tab-real" onclick="go(2)" style="cursor:pointer"><div class="tab-icon-real">◎</div><span>마이</span></div>
+    </div>
+  </div>
+
+  <!-- ── S2: 마이페이지 (실제 캡처 기반) ── -->
+  <div class="screen" id="s2">
+    <div class="status-bar white"><span>SKT 4:02</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="my-profile-real">
+      <div class="my-left-real">
+        <div class="avatar-wrap-real">
+          <div class="avatar-real">👤</div>
+          <div class="edit-badge-real">✎</div>
+        </div>
+        <div>
+          <div class="my-name-real">홍*동 <span style="color:#999;font-weight:500">abc****@mail.com</span> ∨</div>
+        </div>
+      </div>
+      <div class="my-icons-real">
+        <span class="my-icon-real">🛍️</span>
+        <span class="my-icon-real" onclick="go(4)">⚙️</span>
+      </div>
+    </div>
+    <div class="mem-banner-real" onclick="go(3)">
+      <div class="mem-banner-left-real">
+        <div class="n-badge-real">P <span style="color:#2f6fed">+</span> <span style="color:#3478f6">멤버십</span></div>
+      </div>
+      <div class="mem-banner-right-real"><span style="color:#2f6fed;font-weight:800">4% 적립중</span><span style="color:#555"> · 내 혜택 확인하기</span> ›</div>
+    </div>
+    <div class="quick-card-real">
+      <div class="quick-icons-real">
+        <div class="qi-real"><div class="qi-icon-real" style="position:relative">🪪<span class="qi-dot"></span></div><span>신분증·인증</span></div>
+        <div class="qi-real"><div class="qi-icon-real">📄</div><span>전자문서</span></div>
+        <div class="qi-real"><div class="qi-icon-real">💳</div><span>현장결제</span></div>
+        <div class="qi-real"><div class="qi-icon-real">⊞</div><span>QR결제</span></div>
+        <div class="qi-real"><div class="qi-icon-real" style="position:relative">🏛️<span class="qi-dot"></span></div><span>AI 국민비서</span></div>
+      </div>
+      <div class="npay-row-real">
+        <span class="npay-bal-real">간편페이 0원 ›</span>
+        <div class="npay-btns-real">
+          <span class="npay-btn-real">충전</span>
+          <span style="color:#ddd">|</span>
+          <span class="npay-btn-real">송금</span>
+        </div>
+      </div>
+    </div>
+    <div class="tab-row-real">
+      <div class="tab-item-real">🕐</div>
+      <div class="tab-item-real on">♥</div>
+      <div class="tab-item-real">⌕</div>
+      <div class="tab-text-real">결제·상품</div>
+      <div class="tab-text-real">예약·장소</div>
+    </div>
+    <div class="empty-box-real">
+      <h4>좋아요 내역이 없습니다.</h4>
+      <p>좋아한 콘텐츠가 있으면 여기에 표시됩니다.</p>
+    </div>
+    <div class="bottom-tabs-real">
+      <div class="tab-real"><div class="tab-icon-real"><div class="shop-icon-real">P+</div></div><span>쇼핑</span></div>
+      <div class="tab-real"><div class="tab-icon-real">⌂</div><span>홈</span></div>
+      <div class="tab-real"><div class="tab-icon-real">▤</div><span>투데이</span></div>
+      <div class="tab-real"><div class="tab-icon-real">▶</div><span>클립</span></div>
+      <div class="tab-real active"><div class="tab-icon-real">◎</div><span>마이</span></div>
+    </div>
+  </div>
+
+  <!-- ── S3: 마이 멤버십 ── -->
+  <div class="screen" id="s3">
+    <div class="status-bar white"><span>SKT 4:03</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="top-nav">
+      <span class="back" onclick="go(2)">←</span>
+      <span class="nav-title">마이 멤버십</span>
+      <span class="nav-right" onclick="go(4)">설정 ⚙️</span>
+    </div>
+    <div class="mem-detail-header">
+      <div class="sub">홍*동님의 멤버십</div>
+      <h2>P+ 멤버십</h2>
+      <div class="rate">4% 적립중</div>
+    </div>
+    <div class="mem-detail-body">
+      <div class="benefit-row2"><div class="br-left">쇼핑할 때마다 최대 5% 적립</div><div class="br-right">최대 5%</div></div>
+      <div class="benefit-row2"><div class="br-left">슈퍼적립 상품 10% 적립</div><div class="br-right">10%</div></div>
+      <div class="benefit-row2"><div class="br-left">빠른배송 만원이상 무료배송·반품</div><div class="br-right">🚚</div></div>
+    </div>
+    <div class="settings-btn" onclick="go(4)">
+      <span>멤버십 설정 및 관리</span><span>›</span>
+    </div>
+  </div>
+
+  <!-- ── S4: 설정 ── -->
+  <div class="screen" id="s4">
+    <div class="status-bar white"><span>SKT 4:03</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="top-nav">
+      <span class="back" onclick="go(2)">←</span>
+      <span class="nav-title">설정</span>
+      <span></span>
+    </div>
+    <div class="settings-wrap">
+      <div class="settings-section-label">멤버십</div>
+      <div class="settings-item">플러스 멤버십 관리 <span class="settings-arr">›</span></div>
+      <div class="settings-item">무료 이용권 번호 등록하기 <span class="settings-arr">›</span></div>
+      <div class="settings-item">패밀리 계정 관리 <span class="settings-arr">›</span></div>
+      <div class="settings-item">스튜던트로 전환하기 <span class="settings-arr">›</span></div>
+      <div class="settings-item highlight" onclick="go(5)" style="background:#fff8f8">
+        멤버십 정기결제/해지 관리 <span class="settings-arr" style="color:#e84040">›</span>
+      </div>
+      <div class="settings-section-label">정기 결제 관리</div>
+      <div class="settings-item">결제 수단 및 알림 관리 <span class="settings-arr">›</span></div>
+      <div class="settings-item">지난 결제 내역보기 <span class="settings-arr">›</span></div>
+      <div class="settings-item">디지털 콘텐츠 구매 내역 <span class="settings-arr">›</span></div>
+      <div class="settings-section-label">기타</div>
+      <div class="settings-item">공지사항 · 이벤트 <span class="settings-arr">›</span></div>
+      <div class="settings-item">고객센터 <span class="settings-arr">›</span></div>
+      <div class="settings-item">알림 설정 <span class="settings-arr">›</span></div>
+      <div class="settings-item">서비스 이용약관 <span class="settings-arr">›</span></div>
+      <div class="settings-item">플러스 멤버십 이용약관 <span class="settings-arr">›</span></div>
+      <div class="settings-item">개인정보 처리 방침 <span class="settings-arr">›</span></div>
+    </div>
+  </div>
+
+  <!-- ── S5: MY 카드 (개선 전 해지 진입) ── -->
+  <div class="screen" id="s5">
+    <div class="status-bar white"><span>SKT 4:02</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="top-nav">
+      <span class="back" onclick="go(4)">←</span>
+      <span class="nav-title">플러스 멤버십 관리</span>
+      <span></span>
+    </div>
+    <div class="old-my-mem">
+      <div style="font-size:11px;color:#1f5fd1;font-weight:600;margin-bottom:10px">● 멤버십 이용기간 25.04.14.~25.05.14.</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:10px">사용 중인 이용권</div>
+      <div class="old-mem-card">
+        <div class="old-mem-card-head">
+          <span style="background:rgba(47,111,237,.16);border:1px solid rgba(47,111,237,.35);border-radius:6px;padding:2px 7px;font-size:10px;color:#1f5fd1;font-weight:700">P+ 멤버십</span>
+          <span style="font-size:12px;font-weight:700">월간 이용권</span>
+        </div>
+        <div class="old-mem-card-body">
+          <div class="omc-row"><span>멤버십 기간</span><strong>25.04.14.~25.05.14.</strong></div>
+          <div class="omc-row"><span>결제금액</span><strong>4,900원</strong></div>
+        </div>
+      </div>
+      <div style="font-size:14px;font-weight:800;margin:14px 0 10px">사용 예정 이용권</div>
+      <div class="old-mem-card">
+        <div class="old-mem-card-head">
+          <span style="background:rgba(47,111,237,.16);border:1px solid rgba(47,111,237,.35);border-radius:6px;padding:2px 7px;font-size:10px;color:#1f5fd1;font-weight:700">P+ 멤버십</span>
+          <span style="font-size:12px;font-weight:700">월간 이용권</span>
+        </div>
+        <div class="old-mem-card-body">
+          <div class="omc-row"><span>결제 예정일</span><strong>25.05.14.</strong></div>
+          <div class="omc-row"><span>결제 예정 금액</span><strong>4,900원</strong></div>
+        </div>
+      </div>
+      <div class="acc-mgmt-note"><span>이용권 보관함 <span style="color:#aaa">이용권 없음</span></span><span style="color:#ccc">›</span></div>
+      <div class="acc-mgmt-note"><span>플러스 멤버십 관리 유의사항</span><span style="color:#ccc">∨</span></div>
+      <div class="action-outline">정기결제 수단 변경하기</div>
+      <div class="action-red" onclick="go(6)">플러스 멤버십 해지하기</div>
+    </div>
+  </div>
+
+  <!-- ── S6: "OO님, 잠시만요!" 혜택 강조 + 스크롤 ── -->
+  <div class="screen" id="s6">
+    <div class="status-bar white"><span>SKT 4:02</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="top-nav">
+      <span class="back" onclick="go(5)">←</span>
+      <span class="nav-title">플러스 멤버십 해지</span>
+      <span></span>
+    </div>
+    <div class="retain-real">
+      <div class="retain-real-greet">홍*동님, 잠시만요!</div>
+      <div class="retain-real-sub">멤버십 유지하고<br>매월 받는 혜택을 계속 누리세요!</div>
+      <div class="benefit-detail-box">
+        <div class="bd-real-row"><span>이번 달 쇼핑적립으로</span><span class="amt-em">9,123원 적립</span></div>
+        <div class="bd-real-row"><span>멤버십 전용할인 쿠폰으로</span><span class="amt-em">7,884원 할인</span></div>
+        <div class="bd-real-row"><span>매월 무료 콘텐츠 이용하면</span><span class="amt-em">6,550원 이득</span></div>
+        <div class="bd-real-total-label">이 혜택을 모두 받으면</div>
+        <div class="bd-real-total">총 <b>23,557원</b></div>
+      </div>
+      <div class="bd-check-link">혜택기준 확인하기 ⓘ</div>
+
+      <div class="badge5-wrap">
+        <div class="badge5-circle"><span class="b5small">최대</span><span class="b5big">5%</span></div>
+        <div class="badge5-title">강력한 최대 5% 적립</div>
+        <div class="badge5-sub">쇼핑·예약·여행까지 추가적립 받는 멤버십!<br>이왕이면 적립 받고 쇼핑하셔야죠.</div>
+      </div>
+      <div class="partner-grid">
+        <div class="partner-card"><div class="pc-icon" style="background:linear-gradient(135deg,#7c4dff,#2f6fed)">🚚</div><div class="pc-name">빠른배송 ›</div></div>
+        <div class="partner-card"><div class="pc-icon" style="background:#ffe8e8;color:#e84040">📺</div><div class="pc-name">쇼핑라이브 ›</div></div>
+      </div>
+
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid #f0f0f0">
+        <div style="font-size:13px;font-weight:700;color:#888;margin-bottom:10px">더 많은 쿠폰 할인이 있어요!</div>
+        <div style="font-size:11px;color:#aaa;margin-bottom:14px">지금은 쿠폰 혜택이 곧 사라져요. 지금이 바로 챙기세요.</div>
+      </div>
+    </div>
+    <div class="scroll-cta-wrap">
+      <button class="scroll-keep-btn" onclick="go(1)">멤버십 유지하기</button>
+      <div class="scroll-proceed" onclick="go(7)">해지 절차 계속하기 ›</div>
+    </div>
+  </div>
+
+  <!-- ── S7: "정말 멤버십을 해지하시겠어요?" ── -->
+  <div class="screen" id="s7">
+    <div class="status-bar white"><span>SKT 4:02</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="top-nav">
+      <span class="back" onclick="go(6)">←</span>
+      <span class="nav-title">플러스 멤버십 해지</span>
+      <span></span>
+    </div>
+    <div class="confirm-real">
+      <div class="confirm-real-title">홍*동님,<br>정말 멤버십을 해지하시겠어요?</div>
+      <div class="confirm-real-sub">멤버십 유지하고 회원 전용 혜택을 누리세요.</div>
+      <div class="confirm-real-period">● 멤버십 이용기간 25.04.14.~25.05.14.</div>
+      <button class="confirm-real-btn primary-fill" onclick="go(1)">혜택 유지하기</button>
+      <button class="confirm-real-btn outline-green" onclick="go(8)">정기결제 해지하기</button>
+      <button class="confirm-real-btn outline-green" onclick="go(8)">멤버십 즉시 종료하기</button>
+    </div>
+  </div>
+
+  <!-- ── S8: 해지 이유 안내 (보조 단계, 31일 만류) ── -->
+  <div class="screen" id="s8">
+    <div class="status-bar white"><span>SKT 4:02</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="top-nav">
+      <span class="back" onclick="go(6)">←</span>
+      <span class="nav-title">플러스 멤버십 관리</span>
+      <span></span>
+    </div>
+    <div class="old-cancel-intro">
+      <div style="font-size:11px;color:#1f5fd1;font-weight:600;margin-bottom:10px">● 멤버십 이용기간 25.04.14.~25.05.14.</div>
+      <div class="days-msg">홍*동님, 멤버십 이용기간이<br>아직 <em>31일</em>이나 남았어요!</div>
+      <div class="days-sub">더 이용해보고 결정하시겠어요?</div>
+      <div class="cancel-opt green" onclick="go(1)">혜택 유지하기 <span>›</span></div>
+      <div class="cancel-opt gray" onclick="go(9)">정기결제 해지하기 <span>›</span></div>
+      <div class="cancel-opt red" onclick="go(9)">멤버십 즉시 종료하기 <span>›</span></div>
+      <div class="note-box">
+        <h5>정기결제 해지하기 유의사항</h5>
+        <ul>
+          <li>5월 14일까지 서비스 이용 후 정기결제가 해지됩니다.</li>
+          <li>이용권 보관함에 이용권이 있으면 멤버십이 연장됩니다.</li>
+          <li>멤버십 이용기간 만료 시, 패밀리결제 서비스도 해지됩니다.</li>
+          <li>5월 14일에 진행된 결제가 있으면 취소됩니다.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S9: 설문 ── -->
+  <div class="screen" id="s9">
+    <div class="status-bar white"><span>SKT 4:03</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="top-nav">
+      <span class="back" onclick="go(8)">←</span>
+      <span class="nav-title">플러스 멤버십 해지</span>
+      <span></span>
+    </div>
+    <div class="survey-wrap">
+      <div class="survey-title">홍*동님, 멤버십을 해지하시는<br>이유를 알려주세요.</div>
+      <div class="survey-sub">해지하려는 이유를 알려주시면,<br>더 좋은 멤버십을 만드는 데 도움이 됩니다.</div>
+      <div class="reason" onclick="sel(this)"><div class="radio"></div>멤버십 추가적립 혜택이 낮아서</div>
+      <div class="reason" onclick="sel(this)"><div class="radio"></div>이용요금이 비싸서</div>
+      <div class="reason" onclick="sel(this)"><div class="radio"></div>온라인 쇼핑 횟수가 줄어서</div>
+      <div class="reason" onclick="sel(this)"><div class="radio"></div>디지털 콘텐츠를 이용하지 않아서</div>
+      <div class="reason" onclick="sel(this)"><div class="radio"></div>기타입력</div>
+      <button class="survey-submit" onclick="go(10)">제출하기</button>
+      <button class="survey-keep" onclick="go(1)">멤버십 유지하기</button>
+      <div class="skip" onclick="go(10)">설문조사 건너뛰기 ›</div>
+    </div>
+  </div>
+
+  <!-- ── S10: 동영상 콘텐츠 광고 ── -->
+  <div class="screen" id="s10">
+    <div class="status-bar white"><span>SKT 4:03</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="top-nav">
+      <span class="back" onclick="go(9)">←</span>
+      <span class="nav-title">플러스 멤버십 해지</span>
+      <span></span>
+    </div>
+    <div class="ad-wrap">
+      <div class="ad-title">홍*동님, 멤버십을 해지하시는<br>이유를 알려주세요.</div>
+      <div class="netflix-card">
+        <div class="nf-emoji">🎬</div>
+        <div style="font-size:12px;color:#aaa;margin-bottom:6px">홍*동님</div>
+        <div class="nf-title">새롭게 추가된 동영상 콘텐츠를<br>지금 바로 즐겨보세요!</div>
+        <div class="nf-sub">동영상 콘텐츠 오리지널 방송, 영화 시청 가능!</div>
+      </div>
+      <div class="ad-btns">
+        <div class="ad-refund" onclick="go(11)">환불하기</div>
+        <div class="ad-stay" onclick="go(1)">계속 이용하기</div>
+      </div>
+      <div class="ad-submit" onclick="go(11)">제출하기</div>
+      <div class="ad-keep" onclick="go(1)">멤버십 유지하기</div>
+      <div class="ad-skip" onclick="go(11)">설문조사 건너뛰기 ›</div>
+    </div>
+  </div>
+
+  <!-- ── S11: 환불 확인 ── -->
+  <div class="screen" id="s11">
+    <div class="status-bar white"><span>SKT 4:04</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="top-nav">
+      <span class="back" onclick="go(10)">←</span>
+      <span class="nav-title">플러스 멤버십 해지</span>
+      <span></span>
+    </div>
+    <div class="refund-wrap">
+      <div class="refund-title">플러스 멤버십 이용을<br>중단하고 환불 받겠습니까?</div>
+      <div class="refund-sub">환불 시 멤버십 추가 적립 포인트가 회수, 취소됩니다.</div>
+      <div class="refund-box">
+        <div class="rf-row"><span>환불 예상 금액</span><span style="color:#2f6fed;font-weight:700">+4,900원</span></div>
+        <div class="rf-row"><span style="padding-left:12px">· 현재 이용기간</span><span>+4,900원</span></div>
+        <div class="rf-row"><span style="padding-left:12px">· 잔여 이용기간</span><span>0원</span></div>
+        <div class="rf-row hl"><span>회수 예정 포인트</span><strong>0원</strong></div>
+        <div class="rf-row"><span>적립예정 취소 포인트</span><strong>0원</strong></div>
+      </div>
+      <ul class="refund-warn">
+        <li>멤버십을 즉시 해지하고 환불합니다.</li>
+        <li>환불금액은 결제하신 수단으로 되돌아 드립니다.</li>
+        <li>멤버십 해지 후, 이용권 보관함의 잔여 이용권은 소멸되고 복구되지 않습니다.</li>
+        <li>멤버십 이용기간 만료 시, 패밀리결제 서비스도 해지됩니다.</li>
+      </ul>
+      <button class="refund-confirm" onclick="go(12)">환불하기</button>
+      <button class="refund-keep" onclick="go(1)">유지하기</button>
+    </div>
+  </div>
+
+  <!-- ── S12: 완료 ── -->
+  <div class="screen" id="s12">
+    <div class="status-bar white"><span>SKT 4:05</span><div class="status-icons">📷 🔇 5G ▌▌ 63</div></div>
+    <div class="top-nav"><span></span><span></span><span></span></div>
+    <div class="done-wrap">
+      <div class="done-icon">😔</div>
+      <div class="done-title">멤버십이 해지되었습니다.</div>
+      <div class="done-chip">● 이용기간 종료</div>
+      <div class="done-sub">4,900원이 환불 처리됩니다.<br>환불은 결제 수단에 따라<br>3~5 영업일 내 처리됩니다.</div>
+      <button class="done-btn" onclick="go(1)">처음으로 돌아가기</button>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+const labels = ['','앱 홈','마이페이지','마이 멤버십','설정','멤버십 관리 (해지 진입)','"잠시만요" 혜택 강조','"정말 해지하시겠어요?"','31일 만류 (보조)','해지 이유 설문조사','혜택 재안내 (동영상 콘텐츠)','환불 금액 확인','해지 완료'];
+let cur = 1;
+const guideMap = {
+  1:{ title:'앱 홈 화면 확인', desc:'이 서비스의 앱 홈 화면입니다.', action:"👉 하단의 '마이' 탭을 눌러 다음 화면으로 이동해 주세요." },
+  2:{ title:'마이페이지 확인', desc:'마이페이지 화면입니다.', action:"👉 'P+ 멤버십' 배너를 눌러 다음 화면으로 이동해 주세요." },
+  3:{ title:'마이 멤버십 확인', desc:'가입 중인 멤버십 혜택 정보를 확인하는 화면입니다.', action:"👉 '멤버십 설정 및 관리'를 눌러 다음 화면으로 이동해 주세요." },
+  4:{ title:'설정 화면 확인', desc:'멤버십 관련 설정 항목들이 있는 화면입니다.', action:"👉 '멤버십 정기결제/해지 관리'를 눌러 다음 화면으로 이동해 주세요." },
+  5:{ title:'멤버십 관리 확인', desc:'이용 중인 멤버십 이용권 정보를 확인하는 화면입니다.', action:"👉 '플러스 멤버십 해지하기'를 눌러 다음 화면으로 이동해 주세요." },
+  6:{ title:'멤버십 혜택 안내 확인', desc:'멤버십 혜택을 안내하는 화면입니다. 내용을 자유롭게 살펴봐 주세요.', action:"👉 확인이 끝나면 화면 하단의 '해지 절차 계속하기'를 눌러 다음 화면으로 이동해 주세요." },
+  7:{ title:'해지 여부 확인', desc:'멤버십 해지 여부를 다시 확인하는 화면입니다.', action:"👉 '정기결제 해지하기' 버튼을 눌러 다음 화면으로 이동해 주세요." },
+  8:{ title:'이용기간 안내 확인', desc:'멤버십 잔여 이용기간을 안내하는 화면입니다.', action:"👉 '정기결제 해지하기'를 눌러 다음 화면으로 이동해 주세요." },
+  9:{ title:'해지 사유 설문 확인', desc:'해지 사유를 묻는 설문 화면입니다.', action:"👉 원하는 항목을 선택하신 뒤 '제출하기' 버튼을 눌러 주세요." },
+  10:{ title:'추가 콘텐츠 안내 확인', desc:'추가 콘텐츠를 안내하는 화면입니다.', action:"👉 '환불하기' 버튼을 눌러 다음 화면으로 이동해 주세요." },
+  11:{ title:'환불 내역 확인', desc:'환불 예상 금액과 안내 사항을 확인하는 화면입니다.', action:"👉 내용을 확인하신 후 '환불하기' 버튼을 눌러 해지를 완료해 주세요." },
+  12:{ title:'해지 완료 확인', desc:'멤버십 해지가 완료된 결과 화면입니다.', action:"👉 화면 내용을 확인해 주세요." }
+};
+function updateGuide(n){
+  const g = guideMap[n]; if(!g) return;
+  document.getElementById('guideStep').textContent = g.title;
+  document.getElementById('guideDesc').textContent = g.desc;
+  document.getElementById('guideAction').textContent = g.action;
+}
+function go(n) {
+  document.getElementById('s'+cur).classList.remove('active');
+  cur = n;
+  document.getElementById('s'+cur).classList.add('active');
+  document.querySelector('.phone').scrollTop = 0;
+  window.scrollTo(0,0);
+  updateGuide(n);
+}
+function sel(el) {
+  document.querySelectorAll('.reason').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+</script>
+</body>
+</html>

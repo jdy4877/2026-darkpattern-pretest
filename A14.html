@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<title>반복간섭 — 해외형 플랫폼 현재 조건</title>
+<style>
+:root{
+  --navy:#1f2d3d;
+  --blue:#1677a8;
+  --yellow:#ffdc35;
+  --orange:#ffa41c;
+  --green:#15803d;
+  --text:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --bg:#f4f5f6;
+}
+*{box-sizing:border-box;scrollbar-width:none!important;-ms-overflow-style:none!important}
+*::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+body{margin:0;background:#d7d7d7;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;color:var(--text)}
+.phone{width:390px;max-width:100%;min-height:100vh;margin:0 auto;background:#fff;position:relative;box-shadow:0 0 22px rgba(0,0,0,.18);overflow:hidden}
+.status{height:28px;padding:6px 14px;font-size:13px;font-weight:800;display:flex;justify-content:space-between;background:#fff;color:#111}
+.screen{display:none;min-height:calc(100vh - 28px);background:#fff}
+.screen.active{display:block}
+.scroll{height:calc(100vh - 28px);overflow-y:auto;overflow-x:hidden;padding-bottom:76px}
+.top-dark{background:var(--navy);color:#fff;padding:12px 14px 10px;position:sticky;top:0;z-index:5}
+.topline{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.menu{font-size:28px}
+.logo{font-size:30px;font-weight:900;letter-spacing:-1px}
+.logo span{color:#f97316}
+.account{margin-left:auto;font-size:15px}
+.cart{font-size:28px;position:relative}
+.cart:after{content:"0";position:absolute;top:-9px;right:-7px;color:#ffb000;font-size:16px;font-weight:900}
+.searchbar{height:50px;background:#fff;border-radius:8px;display:flex;align-items:center;color:#111;overflow:hidden}
+.searchbar input{border:0;outline:0;flex:1;padding:0 14px;font-size:17px}
+.searchbtn{width:58px;height:50px;background:#ffbc57;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900}
+.deliver{background:#34455a;color:#fff;padding:10px 14px;font-size:15px}
+.adbar{margin:10px 8px 4px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;gap:10px;padding:7px;background:#fff}
+.ad-thumb{width:66px;height:48px;background:#f5f5f5;border:1px solid #ddd;border-radius:4px;position:relative}
+.ad-thumb:before,.ad-thumb:after{content:"";position:absolute;border:5px solid #111;border-bottom-width:10px;border-radius:40% 40% 50% 50%;width:14px;height:36px;top:3px}
+.ad-thumb:before{left:13px}.ad-thumb:after{right:13px;border-color:#444}
+.ad-title{font-size:13px;line-height:1.2;flex:1}.ad-price{font-size:20px;font-weight:800}
+.product-head{padding:8px 14px}
+.brand{color:#1677a8;font-size:15px}.rating{float:right;color:#f97316;font-size:13px}
+.title{font-size:17px;line-height:1.35;margin-top:5px}
+.hero{height:500px;background:#fff;display:flex;align-items:center;justify-content:center;position:relative}
+.straps{width:330px;height:430px;position:relative}
+.strap{position:absolute;width:120px;height:290px;border:14px solid #151515;border-bottom:0;border-radius:60px 60px 20px 20px;top:30px}
+.strap:after{content:"";position:absolute;width:32px;height:70px;background:#111;border-radius:8px;left:30px;bottom:-78px}
+.strap:before{content:"";position:absolute;width:48px;height:20px;background:#111;border-radius:9px;left:22px;bottom:-102px}
+.strap.s1{left:18px}.strap.s2{right:40px;border-color:#464646}
+.tab{position:absolute;width:82px;height:34px;background:#111;border-radius:20px;bottom:20px}.tab.t1{left:22px}.tab.t2{right:45px;background:#333}
+.phone-icon{position:absolute;right:0;bottom:75px;width:54px;height:92px;border-radius:13px;background:linear-gradient(#a855f7,#111827 55%,#dbeafe);border:3px solid #111}
+.dots{text-align:center;font-size:22px;letter-spacing:6px;color:#aaa;margin-top:-26px}.dots span:first-child{color:#111}
+.fav-share{position:absolute;right:18px;bottom:15px;font-size:30px;display:flex;gap:24px}
+.options{padding:12px 14px;border-top:1px solid var(--line)}
+.option-title{font-size:17px;margin-bottom:10px}.option-title b{font-weight:900}
+.option-row{display:flex;gap:10px;overflow:auto;padding-bottom:8px}
+.opt{width:104px;flex:0 0 auto;border:1px solid #cfcfcf;border-radius:8px;overflow:hidden;background:#fff}
+.opt.selected{border:3px solid #1677a8}
+.opt-img{height:82px;background:#f6f6f6;position:relative}
+.opt-img:before,.opt-img:after{content:"";position:absolute;border:3px solid #111;border-bottom-width:7px;border-radius:20px 20px 30px 30px;width:18px;height:45px;top:8px}
+.opt-img:before{left:26px}.opt-img:after{right:26px;border-color:#555}
+.opt p{margin:8px;font-size:13px;line-height:1.25}.opt b{font-size:14px}
+.price-area{padding:18px 14px;border-top:1px solid var(--line)}
+.price{font-size:46px;letter-spacing:-1px}.price small{font-size:18px;vertical-align:top;margin-right:4px}
+.info{font-size:17px;line-height:1.42;margin:10px 0}.link{color:#1677a8;font-weight:700}.green{color:var(--green);font-size:22px;font-weight:800}
+.coupon{display:inline-block;background:#86efac;color:#111;padding:3px 8px;margin:8px 4px 8px 0}
+.select{border:1px solid #bbb;border-radius:10px;padding:14px;margin:14px 0;font-size:18px;display:flex;justify-content:space-between}
+.btn{width:100%;height:54px;border:0;border-radius:999px;font-size:18px;font-weight:800;margin:7px 0;cursor:pointer}
+.btn-yellow{background:var(--yellow)}.btn-orange{background:var(--orange)}
+.spec{padding:12px 14px 26px;border-top:1px solid var(--line)}
+.spec-row{display:flex;margin:10px 0}.spec-row span:first-child{width:110px;color:#6b7280}
+.nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:390px;max-width:100%;height:62px;background:#fff;border-top:1px solid #ddd;display:flex;align-items:center;justify-content:space-around;z-index:10;color:#111}
+.nav div{text-align:center;font-size:25px}.nav small{display:block;font-size:10px;color:#777}
+.order-top{height:60px;background:var(--navy);color:#fff;display:flex;align-items:center;padding:0 14px;gap:12px}.order-title{font-size:21px;font-weight:900}
+.order{height:calc(100vh - 88px);overflow-y:auto;padding-bottom:88px;background:#fff}
+.notice{padding:18px 14px;font-size:15px;line-height:1.55;border-bottom:1px solid #ddd}
+.place{width:calc(100% - 28px);margin:10px 14px 18px;height:54px;border:0;border-radius:999px;background:var(--yellow);font-size:18px;font-weight:900}
+.summary{border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:14px}
+.money-row{display:flex;justify-content:space-between;margin:9px 0;font-size:17px}.money-row.total{font-size:22px;font-weight:900}
+.converter{padding:16px 14px;border-bottom:1px solid #ddd}.converter h3{font-size:20px;margin:0 0 6px}
+.radio-row{display:flex;gap:10px;align-items:center;margin:18px 0;font-size:18px}.radio{width:26px;height:26px;border-radius:50%;border:2px solid #bbb;position:relative}.radio.on{border-color:#1677a8}.radio.on:after{content:"";position:absolute;width:12px;height:12px;background:#1677a8;border-radius:50%;left:5px;top:5px}
+.card{padding:16px 14px;border-bottom:1px solid #ddd}.card h3{font-size:21px;margin:0 0 10px}.card p{font-size:16px;line-height:1.45;margin:7px 0}
+.address{font-size:16px;line-height:1.35}
+.item-box{display:flex;gap:12px;background:#f7f7f7;border-radius:8px;padding:12px;margin-top:12px}
+.mini{width:90px;height:90px;background:linear-gradient(135deg,#f8d74a,#fff17a 45%,#d1b531);border:1px solid #ddd;position:relative;flex:0 0 auto;border-radius:8px;overflow:hidden}
+.mini:before{content:'';position:absolute;left:18px;top:32px;width:52px;height:12px;background:#111;transform:rotate(-17deg);border-radius:8px}
+.mini:after{content:'G-GUARD';position:absolute;left:17px;top:53px;font-weight:900;font-size:11px;color:#222;transform:rotate(-17deg)}
+.qty{display:inline-flex;align-items:center;gap:24px;border:3px solid var(--yellow);border-radius:999px;padding:5px 12px;margin-top:12px;font-size:18px}
+.packaging{border:1px solid #aaa;border-radius:8px;padding:12px;margin-top:12px;font-size:17px;display:flex;justify-content:space-between}
+.sticky{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:390px;max-width:100%;background:#fff;border-top:1px solid #ddd;padding:10px 14px;z-index:9}
+.done{padding:36px 18px}.check{font-size:52px;color:var(--green);text-align:center}.done h1{text-align:center}.done-card{border:1px solid #ddd;border-radius:12px;padding:18px;margin-top:18px}
+
+/* 네이버 자극물과 동일한 G-GUARD 상품 이미지 스타일 */
+.ad-thumb,
+.opt-img,
+.mini{
+  background:linear-gradient(135deg,#f8d74a,#fff17a 45%,#d1b531) !important;
+  position:relative !important;
+  overflow:hidden !important;
+}
+.ad-thumb:before,
+.opt-img:before,
+.mini:before{
+  content:'' !important;
+  position:absolute !important;
+  background:#111 !important;
+  transform:rotate(-17deg) !important;
+  border-radius:10px !important;
+}
+.ad-thumb:after,
+.opt-img:after,
+.mini:after{
+  content:'G-GUARD' !important;
+  position:absolute !important;
+  font-weight:900 !important;
+  color:#222 !important;
+  transform:rotate(-17deg) !important;
+}
+.ad-thumb:before{left:8px!important;top:13px!important;width:46px!important;height:10px!important}
+.ad-thumb:after{left:8px!important;top:27px!important;font-size:9px!important}
+
+.opt-img:before{left:18px!important;top:26px!important;width:58px!important;height:12px!important}
+.opt-img:after{left:18px!important;top:49px!important;font-size:11px!important}
+
+.mini:before{left:18px!important;top:32px!important;width:52px!important;height:12px!important}
+.mini:after{left:17px!important;top:53px!important;font-size:11px!important}
+
+.hero{
+  height:420px !important;
+  background:linear-gradient(160deg,#1d252d,#4f5964 45%,#e7e7e7) !important;
+  position:relative !important;
+  color:#fff !important;
+  display:block !important;
+  overflow:hidden !important;
+}
+.hero:before{
+  content:'도난 걱정 끝!' !important;
+  position:absolute !important;
+  left:36px !important;
+  bottom:128px !important;
+  font-size:28px !important;
+  font-weight:900 !important;
+  text-shadow:0 2px 8px rgba(0,0,0,.5) !important;
+  z-index:3 !important;
+}
+.hero:after{
+  content:'1/12' !important;
+  position:absolute !important;
+  right:12px !important;
+  bottom:10px !important;
+  background:rgba(0,0,0,.45) !important;
+  border-radius:12px !important;
+  padding:3px 9px !important;
+  font-size:12px !important;
+  z-index:4 !important;
+}
+.straps{
+  width:300px !important;
+  height:300px !important;
+  position:absolute !important;
+  left:45px !important;
+  top:62px !important;
+  background:linear-gradient(135deg,#f8d74a,#fff17a 45%,#d1b531) !important;
+  border-radius:14px !important;
+  box-shadow:0 10px 26px rgba(0,0,0,.25) !important;
+  overflow:hidden !important;
+  transform:rotate(-3deg) !important;
+}
+.straps:before{
+  content:'' !important;
+  position:absolute !important;
+  left:46px !important;
+  top:70px !important;
+  width:190px !important;
+  height:38px !important;
+  background:#111 !important;
+  transform:rotate(-17deg) !important;
+  border-radius:20px !important;
+  box-shadow:0 34px 0 rgba(0,0,0,.88) !important;
+}
+.straps:after{
+  content:'G-GUARD' !important;
+  position:absolute !important;
+  left:54px !important;
+  top:162px !important;
+  font-weight:900 !important;
+  font-size:36px !important;
+  color:#222 !important;
+  letter-spacing:-1px !important;
+  transform:rotate(-17deg) !important;
+}
+.strap,.tab,.phone-icon{display:none!important}
+
+/* 홈 화면 (상품 목록) */
+.home-section-title{font-size:19px;font-weight:900;padding:16px 14px 8px;color:#111}
+.home-item{display:flex;gap:12px;padding:14px;border-top:1px solid var(--line);cursor:default}
+.home-item.clickable{cursor:pointer}
+.prod-thumb{width:96px;height:96px;border-radius:8px;flex:0 0 auto;position:relative;overflow:hidden;background:#f3f4f6}
+.prod-thumb.main{background:linear-gradient(135deg,#f8d74a,#fff17a 45%,#d1b531)}
+.prod-thumb.main:before{content:'';position:absolute;left:14px;top:24px;width:56px;height:13px;background:#111;transform:rotate(-17deg);border-radius:8px}
+.prod-thumb.main:after{content:'G-GUARD';position:absolute;left:13px;top:44px;font-weight:900;font-size:11px;color:#222;transform:rotate(-17deg)}
+.prod-thumb.fan{background:linear-gradient(135deg,#dceeff,#aed4ff 55%,#eaf7ff)}
+.prod-thumb.fan:before{content:'';position:absolute;left:24px;top:18px;width:48px;height:48px;border-radius:50%;background:#2f8ee0}
+.prod-thumb.fan:after{content:'MINI FAN';position:absolute;left:14px;top:74px;font-weight:900;font-size:11px;color:#1c4c74}
+.prod-thumb.mount{background:linear-gradient(135deg,#ffe9c2,#ffd27a 55%,#fff3d9)}
+.prod-thumb.mount:before{content:'';position:absolute;left:14px;top:32px;width:66px;height:14px;background:#333;border-radius:8px;transform:rotate(9deg)}
+.prod-thumb.mount:after{content:'CARFIT';position:absolute;left:18px;top:58px;font-weight:900;font-size:12px;color:#4a2e00}
+.prod-thumb.pouch{background:linear-gradient(135deg,#d8f5ec,#9fe6cd 55%,#eafff7)}
+.prod-thumb.pouch:before{content:'';position:absolute;left:18px;top:20px;width:58px;height:48px;border-radius:12px;background:#1f9d78}
+.prod-thumb.pouch:after{content:'AQUA BAG';position:absolute;left:12px;top:76px;font-weight:900;font-size:10px;color:#0d4a37}
+.home-info{flex:1;min-width:0}
+.home-info b{font-size:14px;line-height:1.35;display:block;margin-bottom:6px}
+.home-price{font-size:18px;font-weight:800}
+.home-price small{font-size:12px;vertical-align:top;margin-right:2px}
+body{display:flex;flex-direction:column;align-items:center}
+.guide{all:unset;box-sizing:border-box;display:block;position:sticky;top:0;z-index:200;width:390px;max-width:100%;background:#fff;padding:14px 18px 16px;box-shadow:0 3px 10px rgba(0,0,0,.12);border-bottom:1px solid #e2e4e8}
+.guide .gtitle{all:unset;display:block;font-size:16px;font-weight:900;margin:0 0 6px;color:#151515}
+.guide .desc{all:unset;display:block;font-size:13.5px;line-height:1.55;color:#333}
+.guide .action{all:unset;display:block;margin-top:10px;padding:9px 12px;background:#f4f6f8;border-radius:9px;font-size:13px;color:#237bd3;font-weight:700}
+</style>
+</head>
+<body>
+<div class="guide" id="guide">
+  <div class="gtitle" id="guideStep">홈 화면 확인</div>
+  <div class="desc" id="guideDesc">쇼핑 서비스의 홈 화면입니다. 목록에 나타난 상품들을 살펴보시고, 구매를 진행하고 싶은 상품을 선택해 주세요.</div>
+  <div class="action" id="guideAction">👉 '지카드 핸드폰 도난방지 스트랩' 상품을 눌러 다음 화면으로 이동해 주세요.</div>
+</div>
+<div class="phone">
+  <div class="status"><span>20:08</span><span>Wi‑Fi 19</span></div>
+
+  <div id="home" class="screen active">
+    <div class="scroll">
+      <div class="top-dark">
+        <div class="topline">
+          <div class="menu">☰</div>
+          <div class="logo">market<span>+</span></div>
+          <div class="account">Hong ›</div>
+          <div class="cart">🛒</div>
+        </div>
+        <div class="searchbar">
+          <input placeholder="검색어를 입력하세요">
+          <div class="searchbtn">⌕</div>
+        </div>
+      </div>
+      <div class="deliver">📍 서울특별시 종로구 성균관로 **로 배송</div>
+      <div class="home-section-title">둘러보기 좋은 상품</div>
+      <div class="home-item clickable" onclick="go('detail')"><div class="prod-thumb main"></div><div class="home-info"><b>지카드 핸드폰 도난방지 스트랩 손목 핸드 줄 고리 소매치기 강화 분실</b><div class="home-price"><small>KRW</small>13,800</div></div></div>
+      <div class="home-item"><div class="prod-thumb fan"></div><div class="home-info"><b>미니 휴대용 손선풍기 USB 충전식 저소음 3단 풍속조절</b><div class="home-price"><small>KRW</small>26,800</div></div></div>
+      <div class="home-item"><div class="prod-thumb mount"></div><div class="home-info"><b>차량용 무선 충전 거치대 원터치 자동클램프</b><div class="home-price"><small>KRW</small>19,000</div></div></div>
+      <div class="home-item"><div class="prod-thumb pouch"></div><div class="home-info"><b>방수 실리콘 크로스백 파우치 다용도 여행용</b><div class="home-price"><small>KRW</small>13,800</div></div></div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <div id="detail" class="screen">
+    <div class="scroll">
+      <div class="top-dark">
+        <div class="topline">
+          <span class="back" onclick="go('home')" style="font-size:26px;cursor:pointer">‹</span>
+          <div class="menu">☰</div>
+          <div class="logo">market<span>+</span></div>
+          <div class="account">Hong ›</div>
+          <div class="cart">🛒</div>
+        </div>
+        <div class="searchbar">
+          <input value="도난방지 스트랩" readonly>
+          <div class="searchbtn">⌕</div>
+        </div>
+      </div>
+      <div class="deliver">📍 서울특별시 종로구 성균관로 **로 배송</div>
+
+      <div class="adbar">
+        <div class="ad-thumb"></div>
+        <div class="ad-title"><b>지카드 핸드폰 도난방지 스트랩</b><br><span class="ad-price">13,800원</span> <span class="link">멤버배송</span></div>
+        <small>광고</small>
+      </div>
+
+      <div class="product-head">
+        <span class="brand">브랜드: G-GUARD</span>
+        <span class="rating">4.4 ★★★★★ (628)</span>
+        <div class="title">지카드 핸드폰 도난방지 스트랩 손목 핸드 줄 고리 소매치기 강화 분실</div>
+      </div>
+
+      <div class="hero">
+        <div class="straps">
+          <div class="strap s1"></div>
+          <div class="strap s2"></div>
+          <div class="tab t1"></div>
+          <div class="tab t2"></div>
+          <div class="phone-icon"></div>
+        </div>
+        <div class="fav-share">♡ ⤴</div>
+      </div>
+      <div class="dots"><span>●</span> ● ● ● ●</div>
+
+      <div class="options">
+        <div class="option-title">색상: <b>미드나잇 블랙</b></div>
+        <div class="option-row">
+          <div class="opt"><div class="opt-img"></div><p><b>블랙+와인</b><br>13,800원</p></div>
+          <div class="opt"><div class="opt-img"></div><p><b>블랙+옐로우</b><br>13,800원</p></div>
+          <div class="opt selected"><div class="opt-img"></div><p><b>미드나잇 블랙</b><br>13,800원</p></div>
+          <div class="opt"><div class="opt-img"></div><p><b>블랙+레드</b><br>13,800원</p></div>
+        </div>
+      </div>
+
+      <div class="price-area">
+        <div class="price"><small>KRW</small>13,800</div>
+        <div class="info">수입 수수료 없음 & 대한민국 배송비 <b>3,000원</b> <span class="link">자세히</span></div>
+        <div class="info"><b>7월 3일 금요일</b> 대한민국 도착 예정<br>주문 조건 충족 시 무료배송 가능</div>
+        <div class="link" style="font-size:18px;margin:12px 0">📍 서울특별시 종로구 성균관로 **로 배송</div>
+        <div class="green">재고 있음</div>
+        <div><span class="coupon">2개 이상 구매 시 5% 할인</span> 할인 조건 <span class="link">약관</span></div>
+        <div class="select"><span>수량: 1</span><span>⌄</span></div>
+        <button class="btn btn-yellow">장바구니 담기</button>
+        <button class="btn btn-orange" onclick="go('checkout')">바로구매</button>
+      </div>
+
+      <div class="spec">
+        <div class="spec-row"><span>배송</span><b>글로벌 예약·배송 서비스</b></div>
+        <div class="spec-row"><span>판매자</span><span class="link">GITIS-US</span></div>
+        <div class="spec-row"><span>반품</span><span class="link">30일 환불/교환</span></div>
+        <div class="spec-row"><span>선물 옵션</span><span class="link">결제 단계에서 선택 가능</span></div>
+        <div class="link">더보기</div>
+      </div>
+    </div>
+    <div class="nav"><div>⌂<small>홈</small></div><div>♙<small>계정</small></div><div>🛒<small>장바구니</small></div><div>☰<small>메뉴</small></div></div>
+  </div>
+
+  <div id="checkout" class="screen">
+    <div class="order-top"><span class="back" onclick="go('detail')">‹</span><span class="order-title">주문/결제</span></div>
+    <div class="order">
+      <div class="notice">
+        주문을 완료하면 서비스의 개인정보 처리방침 및 이용조건에 동의하는 것으로 간주됩니다.<br>
+        또한 글로벌 배송 서비스의 약관에 동의합니다.
+      </div>
+      <button class="place" onclick="go('done')">원화(KRW)로 주문하기</button>
+
+      <div class="summary">
+        <div class="money-row"><span>상품 금액:</span><span>13,800원</span></div>
+        <div class="money-row"><span>배송 및 처리비:</span><span>3,000원</span></div>
+        <div class="money-row"><span>세전 합계:</span><span>16,800원</span></div>
+        <div class="money-row"><span>예상 세금:</span><span>KRW 0</span></div>
+        <div class="money-row"><span class="link">추가 수수료:⌄</span><span>0원</span></div>
+        <div class="money-row total"><span>주문 총액:</span><span>16,800원</span></div>
+      </div>
+
+      <div class="converter">
+        <h3>결제 금액 확인</h3>
+        <div>원화 기준으로 결제됩니다</div>
+        <div class="radio-row"><span class="radio on"></span><span>16,800원.00</span></div>
+        <div class="radio-row"><span class="radio"></span><span>총 16,800원</span></div>
+        <div class="link">결제 금액 세부내역 보기</div>
+        <p><b>환율</b><br>상품 13,800원 + 배송비 3,000원</p>
+        <div class="link">결제 금액 확인란 무엇인가요?</div>
+      </div>
+
+      <div class="card">
+        <h3>Mastercard 4574로 결제</h3>
+        <div class="link">결제수단 변경</div>
+        <div class="link" style="margin-top:12px">기프트카드, 바우처 또는 프로모션 코드 사용</div>
+      </div>
+
+      <div class="card">
+        <h3>배송지</h3>
+        <div class="address">홍*동<br>[1234*] 서울특별시 종로구 성균관로 *** ***동 ***호</div>
+        <div class="link" style="margin-top:10px">배송지 변경</div>
+      </div>
+
+      <div class="card">
+        <h3>통관 정보</h3>
+        <p>개인통관고유부호가 등록되어 있습니다.</p>
+        <div class="link">ID 변경</div>
+      </div>
+
+      <div class="card">
+        <h3>도착 예정: 2026년 7월 3일</h3>
+        <p>앞으로 22시간 58분 이내 주문 시 금요일 도착 예정</p>
+        <div class="radio-row"><span class="radio on"></span><span><b>금요일, 7월 3일</b><br>3,000원 글로벌 빠른 배송</span></div>
+        <div class="item-box">
+          <div class="mini"></div>
+          <div>
+            <b>지카드 핸드폰 도난방지 스트랩</b><br>
+            미드나잇 블랙<br>
+            <b>13,800원</b><br><br>
+            배송: 글로벌 배송 서비스<br>
+            판매자: <span class="link">GITIS-US</span>
+            <div class="qty">🗑 <b>1</b> +</div>
+          </div>
+        </div>
+        <div class="link" style="margin-top:12px">선물 옵션 추가</div>
+        <p>이 상품은 포장 절감을 위해 제조사 포장 그대로 배송될 수 있습니다.</p>
+        <div class="packaging"><span>포장 줄이기, 제조사 포장으로 배송</span><span>⌄</span></div>
+      </div>
+
+      <div class="notice">
+        원화(KRW)로 주문하기 버튼을 누르면 주문 확인 이메일이 발송됩니다. 상품은 배송 확정 전까지 계약이 완료되지 않을 수 있습니다. 배송 후 30일 이내 새 상품, 미개봉 상태로 반품할 수 있습니다.
+      </div>
+    </div>
+    <div class="sticky"><button class="btn btn-yellow" onclick="go('done')">원화(KRW)로 주문하기</button></div>
+  </div>
+
+  <div id="done" class="screen">
+    <div class="scroll">
+      <div class="order-top"><span class="back" onclick="go('detail')">‹</span><span class="order-title">주문 완료</span></div>
+      <div class="done">
+        <div class="check">✓</div>
+        <h1>주문이 완료되었습니다</h1>
+        <div class="done-card">
+          <h3>도착 예정: 2026년 7월 3일</h3>
+          <p>지카드 핸드폰 도난방지 스트랩<br>미드나잇 블랙</p>
+          <div class="money-row total"><span>총 결제금액</span><span>16,800원</span></div>
+        </div>
+        <button class="btn btn-yellow" onclick="go('detail')">상품 화면으로 돌아가기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const guideMap = {
+  home:{ title:'홈 화면 확인', desc:'쇼핑 서비스의 홈 화면입니다. 목록에 나타난 상품들을 살펴보시고, 구매를 진행하고 싶은 상품을 선택해 주세요.', action:"👉 '지카드 핸드폰 도난방지 스트랩' 상품을 눌러 다음 화면으로 이동해 주세요." },
+  detail:{ title:'상품 상세 확인', desc:'선택하신 상품의 상세 정보를 확인하는 화면입니다. 내용을 자유롭게 살펴봐 주세요.', action:"👉 확인이 끝나면 화면 하단의 '바로구매' 버튼을 눌러 다음 화면으로 이동해 주세요." },
+  checkout:{ title:'주문 내용 확인', desc:'주문 및 결제 정보를 확인하는 화면입니다.', action:"👉 내용을 확인하신 후 '원화(KRW)로 주문하기' 버튼을 눌러 주세요." },
+  done:{ title:'주문 완료 확인', desc:'주문이 완료된 결과 화면입니다.', action:"👉 화면 내용을 확인해 주세요." }
+};
+function updateGuide(id){
+  const g = guideMap[id]; if(!g) return;
+  document.getElementById('guideStep').textContent = g.title;
+  document.getElementById('guideDesc').textContent = g.desc;
+  document.getElementById('guideAction').textContent = g.action;
+}
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  updateGuide(id);
+}
+</script>
+</body>
+</html>
